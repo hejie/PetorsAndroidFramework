@@ -16,8 +16,8 @@ gen/
 local.properties
 
 # Eclipse project files
-.classpath
-.project
+#.classpath
+#.project
 
 # Ignores Mac specific files.
 .DS_Store
