@@ -1,0 +1,97 @@
+package com.skipifzero.petorsandroidframework.framework.opengl;
+
+import android.graphics.Bitmap;
+import android.opengl.GLES10;
+import android.opengl.GLUtils;
+
+import com.skipifzero.petorsandroidframework.framework.FileIO;
+
+public class FileTexture implements Texture {
+
+	private final FileIO file;
+	private final String fileName;
+	private final Bitmap.Config quality;
+
+	private int id;
+	private boolean smoothing;
+	private int width, height;
+
+	public FileTexture(FileIO file, String fileName, Bitmap.Config quality) {
+		this.file = file;
+		this.fileName = fileName;
+		this.quality = quality;
+
+		load();
+	}
+
+	private void load() {
+		//Gets id.
+		int[] ids = new int[1];
+		GLES10.glGenTextures(1, ids, 0);
+		id = ids[0];
+
+		Bitmap bitmap = file.loadBitmap(fileName, quality);
+
+		this.width = bitmap.getWidth();
+		this.height = bitmap.getHeight();
+
+		bind();
+		GLUtils.texImage2D(GLES10.GL_TEXTURE_2D, 0, bitmap, 0);
+		setSmoothing(false);
+		unbind();
+	}
+
+	@Override
+	public void bind() {
+		GLES10.glBindTexture(GLES10.GL_TEXTURE_2D, id);
+	}
+
+	@Override
+	public void unbind() {
+		GLES10.glBindTexture(GLES10.GL_TEXTURE_2D, 0);
+	}
+
+	@Override
+	public void setSmoothing(boolean smoothing) {
+		this.smoothing = smoothing;
+
+		bind();
+		if(smoothing) {
+			GLES10.glTexParameterf(GLES10.GL_TEXTURE_2D, GLES10.GL_TEXTURE_MIN_FILTER, GLES10.GL_LINEAR);
+			GLES10.glTexParameterf(GLES10.GL_TEXTURE_2D, GLES10.GL_TEXTURE_MAG_FILTER, GLES10.GL_LINEAR);
+		}else {
+			GLES10.glTexParameterf(GLES10.GL_TEXTURE_2D, GLES10.GL_TEXTURE_MIN_FILTER, GLES10.GL_NEAREST);
+			GLES10.glTexParameterf(GLES10.GL_TEXTURE_2D, GLES10.GL_TEXTURE_MAG_FILTER, GLES10.GL_NEAREST);
+		}
+		unbind();
+	}
+
+	public void reload() {
+		load();
+		bind();
+		setSmoothing(smoothing);
+		unbind();
+	}
+
+	@Override
+	public void dispose(){
+		GLES10.glBindTexture(GLES10.GL_TEXTURE_2D, 0);
+		int[] IDs = {id};
+		GLES10.glDeleteTextures(1, IDs, 0);
+	}
+
+	@Override
+	public boolean isSmoothed() {
+		return smoothing;
+	}
+	
+	@Override
+	public int getWidth(){
+		return width;
+	}
+
+	@Override
+	public int getHeight(){
+		return height;
+	}
+}
