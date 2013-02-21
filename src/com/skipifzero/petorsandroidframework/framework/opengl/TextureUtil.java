@@ -11,12 +11,28 @@ import android.graphics.Paint;
 
 import com.skipifzero.petorsandroidframework.framework.FileIO;
 
+/**
+ * A class used for loading textures from a directory and generating a texture atlas and corresponding
+ * TextureRegions. All getters give direct references to internal arrays or variables, so this class is
+ * indirectly mutable.
+ * 
+ * In the specified directory there must only be image files, otherwise this class will probably crash when loading.
+ * 
+ * The algorithm for generating texture atlases is currently pretty inefficient. It will check the size of the
+ * largest texture and then create "cells" which it will place each texture in. So to use this class most efficiently
+ * all the textures in the specified folder should be of the same size and with a width/height equal to a power of two.
+ * 
+ * @author Peter Hillerström
+ * @version 1
+ */
 public final class TextureUtil {
 	private static final int MAX_TEXTURE_SIZE = 8192;
 	private static final float TEXTURE_REGION_DELTA = 0.375f;
 	
 	private final String textureDirectory;
-	private final String[] textureRegionStrings;
+	private final Bitmap.Config quality;
+	
+	private String[] textureRegionStrings;
 	private Texture texture;
 	private TextureRegion textureAtlasRegion;
 	private TextureRegion[] textureRegions;
@@ -29,6 +45,18 @@ public final class TextureUtil {
 	 */
 	public TextureUtil(AssetManager assets, String textureDirectory, Bitmap.Config quality) {
 		this.textureDirectory = textureDirectory;
+		this.quality = quality;
+		
+		load(assets);
+	}
+	
+	/**
+	 * Reloads all the textures from this TextureUtil's folder and creates a new texture atlas and new TextureRegions.
+	 * If you're using this method manually and you're not keeping the previously generated Texture you should probably
+	 * call dispose first.
+	 * @return this TextureUtil
+	 */
+	public TextureUtil load(AssetManager assets) {
 		this.textureRegionStrings = loadFileNames(assets);
 		
 		Bitmap[] bitmaps = loadBitmaps(assets, this.textureDirectory, this.textureRegionStrings, quality);	
@@ -77,6 +105,17 @@ public final class TextureUtil {
 		
 			bitmaps[i].recycle(); //Recycles bitmap texture.
 		}
+		
+		return this;
+	}
+	
+	/**
+	 * Disposes of the internal texture atlas.
+	 * Warning, since TextureUtil gives away direct references to its internal texture atlas this method
+	 * will also dispose of textures outside this class that originated in this class.
+	 */
+	public void dispose() {
+		texture.dispose();
 	}
 	
 	/**
