@@ -3,8 +3,7 @@ package com.skipifzero.petorsandroidframework.framework.opengl;
 public class TextureRegion {
 	public final float u1, v1;
 	public final float u2, v2;
-	
-	public final Texture texture;
+	public final float width, height;
 	
 	/**
 	 * Creates a new TextureRegion.
@@ -27,7 +26,8 @@ public class TextureRegion {
 	 * @param height the height of the TextureRegion
 	 */
 	public TextureRegion(Texture texture, float x, float y, float width, float height) {
-		this.texture = texture;
+		this.width = width;
+		this.height = height;
 		
 		int texWidth = texture.getWidth();
 		int texHeight = texture.getHeight();
@@ -38,5 +38,13 @@ public class TextureRegion {
 		//BottomRight texture point.
 		u2 = u1 + width / texWidth;
 		v2 = v1 + height / texHeight;
+	}
+	
+	public double getWidth() {
+		return width;
+	}
+	
+	public double getHeight() {
+		return height;
 	}
 }
