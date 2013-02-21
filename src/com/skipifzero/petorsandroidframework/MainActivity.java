@@ -17,6 +17,7 @@ import com.skipifzero.petorsandroidframework.framework.opengl.OpenGLActivity;
 import com.skipifzero.petorsandroidframework.framework.opengl.SpriteBatcher;
 import com.skipifzero.petorsandroidframework.framework.opengl.Texture;
 import com.skipifzero.petorsandroidframework.framework.opengl.TextureRegion;
+import com.skipifzero.petorsandroidframework.framework.opengl.TextureUtil;
 import com.skipifzero.petorsandroidframework.framework.vector.FinalVector2;
 
 public class MainActivity extends OpenGLActivity {
@@ -39,6 +40,8 @@ public class MainActivity extends OpenGLActivity {
 	private FinalVector2 backgroundPos;
 	
 	private float angle = 0;
+	
+	private TextureUtil texUtil;
 	
 	@Override
 	public void create() {
@@ -63,6 +66,9 @@ public class MainActivity extends OpenGLActivity {
 		
 		backgroundTexture = new FileTexture(file, "BackgroundV1_512x512.png", Bitmap.Config.ARGB_8888);
 		backgroundRegion = new TextureRegion(backgroundTexture, 0, 0, 512, 512);
+		
+		
+		texUtil = new TextureUtil(getAssets(), "textures", Bitmap.Config.ARGB_8888);
 	}
 
 	@Override
@@ -94,41 +100,61 @@ public class MainActivity extends OpenGLActivity {
 		//batcher.draw(backgroundPos, viewWidthDP, viewWidthDP, backgroundRegion);
 		batcher.renderBatch();
 		
-		font.begin(Color.RED);
 		
-		font.setHorizontalAlignment(HorizontalAlignment.LEFT);
-		font.setVerticalAlignment(VerticalAlignment.TOP);
-		font.draw(0, (float)viewHeightDP, 16, "Å Top left corner");
+		batcher.beginBatch(texUtil.getTextureAtlas());
+		//batcher.draw(middleOfScreen, viewWidthDP, viewWidthDP, texUtil.getTextureAtlasRegion());
+		//batcher.draw(middleOfScreen, viewWidthDP, viewWidthDP, texUtil.getTextureRegion("BackgroundV1_512x512.png"));
+		batcher.draw(middleOfScreen, viewWidthDP, viewWidthDP, texUtil.getTextureRegion("1pxRed512.png"));
+		batcher.renderBatch();
 		
-		font.setHorizontalAlignment(HorizontalAlignment.LEFT);
-		font.setVerticalAlignment(VerticalAlignment.CENTER);
-		font.draw(0, 8, 16, "Normal 16. Random blagjefeofj");
-		font.draw(0, 64 - 16, 32, "Normal 32. åÄÅajö <->");
-		font.draw(0, 350, 32, "VA AV WAR RAW");
-		
-		font.setHorizontalAlignment(HorizontalAlignment.RIGHT);
-		font.draw((float)viewWidthDP, (float)(viewHeightDP-16), 32, "th?2042[]()=> END");
-		
-		font.render();
-		
-		//font.completeDraw(middleOfScreen, 64, Color.GREEN, "Normal green");
-		
-		font.begin(Color.argb(100, 255, 255, 255));
-		
-		font.setHorizontalAlignment(HorizontalAlignment.RIGHT);
-		font.setVerticalAlignment(VerticalAlignment.CENTER);
-		
-		font.draw((float)middleOfScreen.getX(), (float)middleOfScreen.getY(), 32f, angle, "Rotating text");
-		
-		
-		font.setHorizontalAlignment(HorizontalAlignment.LEFT);
-		font.setVerticalAlignment(VerticalAlignment.TOP);
-		
-		font.draw((float)viewWidthDP, (float)viewHeightDP, 20, 270, "Side text (180 degrees)");
-		
-		font.render();
-		
-		//font.debugDrawTexture(middleOfScreen, viewWidthDP < viewHeightDP ? viewWidthDP : viewHeightDP, viewWidthDP < viewHeightDP ? viewWidthDP : viewHeightDP);
+//		font.begin(Color.RED);
+//		
+//		font.setHorizontalAlignment(HorizontalAlignment.LEFT);
+//		font.setVerticalAlignment(VerticalAlignment.TOP);
+//		font.draw(0, (float)viewHeightDP, 16, "Å Top left corner");
+//		
+//		font.setHorizontalAlignment(HorizontalAlignment.LEFT);
+//		font.setVerticalAlignment(VerticalAlignment.CENTER);
+//		font.draw(0, 8, 16, "Normal 16. Random blagjefeofj");
+//		font.draw(0, 64 - 16, 32, "Normal 32. åÄÅajö <->");
+//		font.draw(0, 350, 32, "VA AV WAR RAW");
+//		
+//		font.setHorizontalAlignment(HorizontalAlignment.RIGHT);
+//		font.draw((float)viewWidthDP, (float)(viewHeightDP-16), 32, "th?2042[]()=> END");
+//		
+//		font.render();
+//		
+//		
+//		font.begin(Color.argb(100, 255, 255, 255));
+//		
+//		font.setHorizontalAlignment(HorizontalAlignment.RIGHT);
+//		font.setVerticalAlignment(VerticalAlignment.CENTER);
+//		
+//		font.draw((float)middleOfScreen.getX(), (float)middleOfScreen.getY(), 32f, angle, "Rotating text");
+//		
+//		
+//		font.setHorizontalAlignment(HorizontalAlignment.LEFT);
+//		font.setVerticalAlignment(VerticalAlignment.TOP);
+//		
+//		font.draw((float)viewWidthDP, (float)viewHeightDP, 20, 270, "Side text (180 degrees)");
+//		
+//		font.render();
+//		
+//		
+//		
+//		String[] strings = texUtil.getTextureNames();
+//		if(strings != null) {
+//		
+//			font.setHorizontalAlignment(HorizontalAlignment.LEFT);
+//			font.setVerticalAlignment(VerticalAlignment.TOP);
+//			font.begin(Color.WHITE);
+//		
+//			for(int i = 0; i < strings.length; i++) {
+//				font.draw(0, 32 + 32*i, 32, strings[i]);
+//			}
+//			
+//			font.render();
+//		}
 	}
 
 	@Override
