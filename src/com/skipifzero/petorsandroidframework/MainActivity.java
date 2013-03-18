@@ -1,29 +1,26 @@
 package com.skipifzero.petorsandroidframework;
 
-import android.graphics.Bitmap;
-import android.graphics.Color;
-import android.opengl.GLES10;
+import com.skipifzero.petorsandroidframework.framework.opengl.GLActivity;
+import com.skipifzero.petorsandroidframework.framework.opengl.GLScreen;
 
-import com.skipifzero.petorsandroidframework.framework.DisplayScaling;
-import com.skipifzero.petorsandroidframework.framework.FileIO;
-import com.skipifzero.petorsandroidframework.framework.input.Input;
-import com.skipifzero.petorsandroidframework.framework.input.PooledInput;
-import com.skipifzero.petorsandroidframework.framework.opengl.Camera2D;
-import com.skipifzero.petorsandroidframework.framework.opengl.FileTexture;
-import com.skipifzero.petorsandroidframework.framework.opengl.FontRenderer;
-import com.skipifzero.petorsandroidframework.framework.opengl.FontRenderer.HorizontalAlignment;
-import com.skipifzero.petorsandroidframework.framework.opengl.FontRenderer.VerticalAlignment;
-import com.skipifzero.petorsandroidframework.framework.opengl.OpenGLActivity;
-import com.skipifzero.petorsandroidframework.framework.opengl.SpriteBatcher;
-import com.skipifzero.petorsandroidframework.framework.opengl.Texture;
-import com.skipifzero.petorsandroidframework.framework.opengl.TextureRegion;
-import com.skipifzero.petorsandroidframework.framework.opengl.TextureUtil;
-import com.skipifzero.petorsandroidframework.framework.vector.FinalVector2;
+public class MainActivity extends GLActivity {
 
-public class MainActivity extends OpenGLActivity {
+	@Override
+	public GLScreen getInitialGLScreen(GLActivity glActivity) {
+		return new MainScreen(glActivity);
+	}
+
+	@Override
+	public boolean enableFullscreenMode() {
+		return false;
+	}
+	
+}
+
+/*public class MainActivity extends OpenGLActivity {
 
 	private FileIO file;
-	private Input input;
+	private TouchInput input;
 	private DisplayScaling scaling;
 	
 	private SpriteBatcher batcher;
@@ -46,7 +43,7 @@ public class MainActivity extends OpenGLActivity {
 	@Override
 	public void create() {
 		file = new FileIO(getAssets());
-		input = new PooledInput(getGLSurfaceView(), 10);
+		input = new PooledTouchInput(getGLSurfaceView(), 10);
 		scaling = new DisplayScaling(getGLSurfaceView(), getWindowManager());
 		
 		batcher = new SpriteBatcher(100);
@@ -167,4 +164,4 @@ public class MainActivity extends OpenGLActivity {
 	public void destroy() {
 		backgroundTexture.dispose();
 	}
-}
+}*/

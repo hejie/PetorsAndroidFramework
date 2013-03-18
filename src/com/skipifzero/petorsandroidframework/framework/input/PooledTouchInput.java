@@ -12,7 +12,7 @@ import com.skipifzero.petorsandroidframework.framework.input.Pool.PoolObjectFact
 import com.skipifzero.petorsandroidframework.framework.input.TouchEvent.TouchType;
 
 /**
- * An implementation of the input interface.
+ * An implementation of the TouchInput interface.
  * This implementation pools TouchEvents, which means that it reuses them. Thus you should never directly store references to TouchEvents
  * return from this implementation, if you really need to store a specific TouchEvent you can just clone it.
  * 
@@ -20,7 +20,7 @@ import com.skipifzero.petorsandroidframework.framework.input.TouchEvent.TouchTyp
  * @version 1
  */
 
-public class PooledInput implements Input, OnTouchListener {
+public class PooledTouchInput implements TouchInput, OnTouchListener {
 	
 	private View view;
 	private final double scaleFactor;
@@ -46,7 +46,7 @@ public class PooledInput implements Input, OnTouchListener {
 	private TouchEvent tempEvent;
 	private double tempX, tempY;
 	
-	public PooledInput(View view, int maxTouchPositions){
+	public PooledTouchInput(View view, int maxTouchPositions){
 		this(view, 1, maxTouchPositions);
 	}
 	
@@ -56,7 +56,7 @@ public class PooledInput implements Input, OnTouchListener {
 	 * @param scaleFactor (Example: screenX * scaleFactor = otherX)
 	 * @param maxTouchPositions
 	 */
-	public PooledInput(View view, double scaleFactor, int maxTouchPositions){
+	public PooledTouchInput(View view, double scaleFactor, int maxTouchPositions){
 		this.view = view;
 		this.scaleFactor = scaleFactor;
 		this.maxTouchPositions = maxTouchPositions;

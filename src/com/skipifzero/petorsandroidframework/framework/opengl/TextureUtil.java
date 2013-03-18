@@ -27,7 +27,7 @@ import com.skipifzero.petorsandroidframework.framework.FileIO;
  */
 public final class TextureUtil {
 	private static final int MAX_TEXTURE_SIZE = 8192;
-	private static final float TEXTURE_REGION_DELTA = 0.375f;
+	private static final float TEXTURE_REGION_DELTA = 0.05f;//0.375f;
 	
 	private final String textureDirectory;
 	private final Bitmap.Config quality;
@@ -54,6 +54,9 @@ public final class TextureUtil {
 	 * Reloads all the textures from this TextureUtil's folder and creates a new texture atlas and new TextureRegions.
 	 * If you're using this method manually and you're not keeping the previously generated Texture you should probably
 	 * call dispose first.
+	 * The new TextureRegions should be the same as the old ones, so you don't have to worry about them.
+	 * But if you keep a reference to the texture atlas you will have to update it as it no longer
+	 * points to a valid texture.
 	 * @return this TextureUtil
 	 */
 	public TextureUtil load(AssetManager assets) {
@@ -156,6 +159,10 @@ public final class TextureUtil {
 	 * @return TextureRegion containing the specified texture
 	 */
 	public TextureRegion getTextureRegion(String textureFileName) {
+		int index = Arrays.binarySearch(textureRegionStrings, textureFileName);
+		if(index < 0 ) {
+			throw new IllegalArgumentException(textureFileName + " doesn't exist in selected TextureUtil.");
+		}
 		return textureRegions[Arrays.binarySearch(textureRegionStrings, textureFileName)];
 	}
 	

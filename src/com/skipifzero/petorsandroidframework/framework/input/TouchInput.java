@@ -2,7 +2,7 @@ package com.skipifzero.petorsandroidframework.framework.input;
 
 import java.util.List;
 
-public interface Input {
+public interface TouchInput {
 	
 	/**
 	 * Updates the TouchEvents.
