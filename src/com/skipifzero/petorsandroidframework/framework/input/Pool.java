@@ -3,37 +3,65 @@ package com.skipifzero.petorsandroidframework.framework.input;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * A class used to pool objects. 
+ * @param <T> the class to pool
+ * 
+ *  @author Peter Hillerström
+ *  @version 1
+ */
 public class Pool<T> {
+
+	/**
+	 * Interface for a factory to create an object of T type.
+	 * @author Peter Hillerström
+	 * @version 1
+	 * @param <T> the class to create
+	 */
 	public interface PoolObjectFactory<T> {
-	    public T createObject();
+		public T createObject();
 	}
-	
-    private final List<T> freeObjects;
-    private final PoolObjectFactory<T> factory;
-    private final int maxSize;
 
-    public Pool(PoolObjectFactory<T> factory, int maxSize) {
-        this.factory = factory;
-        this.maxSize = maxSize;
-        this.freeObjects = new ArrayList<T>(maxSize);
-    }
+	private final List<T> freeObjects;
+	private final PoolObjectFactory<T> factory;
+	private final int maxSize;
 
-    public T getRecycledObject() {
-    	//If there aren't any free objects to reuse, make a new one.
-    	if(freeObjects.size() <= 0){
-    		return factory.createObject();
-    	}
-    	//Return an old object to reuse.
-    	else{
-    		return freeObjects.remove(freeObjects.size() -1);
-    	}
-    }
+	/**
+	 * Creates a new pool.
+	 * @param factory the factory to creates objects with
+	 * @param maxSize the maximum amount of items this pool can hold
+	 */
+	public Pool(PoolObjectFactory<T> factory, int maxSize) {
+		this.factory = factory;
+		this.maxSize = maxSize;
+		this.freeObjects = new ArrayList<T>(maxSize);
+	}
 
-    public void free(T object) {
-    	//Adds object to list of free objects. If the list is larger than the max size the object will be consumed by the Garbage Collector.
-        if (freeObjects.size() < maxSize){
-            freeObjects.add(object);
-        }
-    }
+	/**
+	 * Returns a recycled object. If there aren't any objects left to reuse it creates a new one.
+	 * @return object of T type
+	 */
+	public T getRecycledObject() {
+		//If there aren't any free objects to reuse, make a new one.
+		if(freeObjects.size() <= 0){
+			return factory.createObject();
+		}
+		//Return an old object to reuse.
+		else{
+			return freeObjects.remove(freeObjects.size() -1);
+		}
+	}
+
+	/**
+	 * Adds an object to recycle to this pool.
+	 * If the pool is full the object will be consumed by the Garbage Collector.
+	 * @param object
+	 */
+	public void freeObject(T object) {
+		//Adds object to list of free objects. If the list is larger than the max size the object will be consumed by the Garbage Collector.
+		if (freeObjects.size() < maxSize){
+			freeObjects.add(object);
+		}
+	}
 }
 

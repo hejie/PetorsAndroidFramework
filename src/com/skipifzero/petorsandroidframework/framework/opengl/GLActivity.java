@@ -13,6 +13,16 @@ import android.view.WindowManager;
 
 import com.skipifzero.petorsandroidframework.framework.input.BackKeyInput;
 
+/**
+ * Class used to make it easier to create Activities using OpenGL ES.
+ * 
+ * How to use:
+ * Extend this class, implement the needed methods, supply a GLScreen to start with and
+ * start this Activity.
+ * 
+ * @author Peter Hillerström
+ * @version 1
+ */
 public abstract class GLActivity extends Activity implements Renderer {
 	
 	//States used to make sure everything in the GLScreen happens on the rendering thread.

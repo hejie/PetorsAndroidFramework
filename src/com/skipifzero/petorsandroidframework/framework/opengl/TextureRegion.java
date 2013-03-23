@@ -1,5 +1,14 @@
 package com.skipifzero.petorsandroidframework.framework.opengl;
 
+
+/**
+ * A class containing a region of a Texture.
+ * 
+ * Primarily used to store multiple sprites on the same Texture and enable use of a SpriteBatcher.
+ * 
+ * @author Peter Hillerström
+ * @version 1
+ */
 public class TextureRegion {
 	public final float u1, v1;
 	public final float u2, v2;
@@ -40,10 +49,18 @@ public class TextureRegion {
 		v2 = v1 + height / texHeight;
 	}
 	
+	/**
+	 * Returns the width of this TextureRegion
+	 * @return width
+	 */
 	public double getWidth() {
 		return width;
 	}
 	
+	/**
+	 * Returns the height of this TextureRegion
+	 * @return height
+	 */
 	public double getHeight() {
 		return height;
 	}

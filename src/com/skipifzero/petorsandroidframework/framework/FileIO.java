@@ -9,6 +9,12 @@ import android.graphics.BitmapFactory;
 import android.graphics.BitmapFactory.Options;
 import android.graphics.Typeface;
 
+/**
+ * A class used for various IO operations.
+ * @author Peter Hillerström
+ * @version 1
+ */
+
 public class FileIO {
 	
 	private AssetManager assets;
@@ -17,7 +23,14 @@ public class FileIO {
 		this.assets = assets;
 	}
 	
-	//Loads and returns a Bitmap.
+	/**
+	 * Loads a bitmap from the assets folder with the specified name.
+	 * The quality is not guaranteed, just a suggestion.
+	 * @param fileName the path to the bitmap in the assets folder
+	 * @param config the suggested quality
+	 * @throws RuntimeException if it couldn't load the bitmap.
+	 * @return loaded bitmap
+	 */
 	public Bitmap loadBitmap(String fileName, Bitmap.Config config){
 		Options options = new Options();
 		options.inPreferredConfig = config;
@@ -50,7 +63,11 @@ public class FileIO {
 		return bitmap;
 	}
 	
-	//Load and return Typeface font.
+	/**
+	 * Loads a font from the assets folder.
+	 * @param fileName the path to the font in the assets folder
+	 * @return the font
+	 */
 	public Typeface loadFont(String fileName){
 		return Typeface.createFromAsset(assets, fileName);
 	}

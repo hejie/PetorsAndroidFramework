@@ -4,6 +4,12 @@ import android.graphics.Bitmap;
 import android.opengl.GLES10;
 import android.opengl.GLUtils;
 
+/**
+ * An implementation of Texture that takes an Bitmap as the argument. Doesn't keep the bitmap
+ * so it can't be reloaded.
+ * @author Peter Hillerström
+ * @version 1
+ */
 public class BitmapTexture implements Texture {
 
 	private int id;

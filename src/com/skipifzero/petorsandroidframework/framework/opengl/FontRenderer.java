@@ -16,7 +16,7 @@ import com.skipifzero.petorsandroidframework.framework.vector.Vector2;
  * Uses a SpriteBatcher, which means you have to call "begin()" before your drawing calls and "render()" afterwards.
  * Unless you use the "drawComplete()" methods which do that for you, however those might be a bit slower.
  * You can only have on SpriteBatcher running at a time, so you can't render some text in the middle of rendering
- * some sprites.
+ * sprites.
  * 
  * Based on http://fractiousg.blogspot.se/2012/04/rendering-text-in-opengl-on-android.html.
  * 

@@ -2,6 +2,12 @@ package com.skipifzero.petorsandroidframework.framework.input;
 
 import java.util.List;
 
+/**
+ * An interface for getting touch input.
+ * @author Peter Hillerström
+ * @version 1
+ */
+
 public interface TouchInput {
 	
 	/**

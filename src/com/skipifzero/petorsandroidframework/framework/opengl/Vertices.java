@@ -7,6 +7,11 @@ import java.nio.ShortBuffer;
 
 import android.opengl.GLES10;
 
+/**
+ * A class used for storing Vertices.
+ * @author Peter Hillerström
+ * @version 1
+ */
 public class Vertices {
 	
 	private final boolean hasColor, hasTexture;
@@ -68,7 +73,7 @@ public class Vertices {
 	public void draw(int primitiveType, int offset, int verticesAmount) {
 		if(indices != null){
 			indices.position(offset);
-			GLES10.glDrawElements(primitiveType, verticesAmount, GLES10.GL_UNSIGNED_SHORT, indices); //Type (for example GLES10.GL_TRIANGLES), amount of vertices, ???.
+			GLES10.glDrawElements(primitiveType, verticesAmount, GLES10.GL_UNSIGNED_SHORT, indices);
 		}else{
 			GLES10.glDrawArrays(primitiveType, offset, verticesAmount);
 		}

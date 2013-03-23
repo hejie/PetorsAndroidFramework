@@ -4,6 +4,13 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnKeyListener;
 
+/**
+ * A class used for checking if the back button is pressed or not.
+ * 
+ * @author Peter Hillerström
+ * @version 1
+ */
+
 public class BackKeyInput implements OnKeyListener {
 
 	private static final int BACK_KEY_CODE = 4;

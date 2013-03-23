@@ -1,11 +1,17 @@
 package com.skipifzero.petorsandroidframework.framework.opengl;
 
+import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.opengl.GLES10;
 import android.opengl.GLUtils;
 
 import com.skipifzero.petorsandroidframework.framework.FileIO;
 
+/**
+ * An implementation of Texture that takes a path to an image in the assets folder as the argument.
+ * @author Peter Hillerström
+ * @version 1
+ */
 public class FileTexture implements Texture {
 
 	private final FileIO file;
@@ -16,8 +22,8 @@ public class FileTexture implements Texture {
 	private boolean smoothing;
 	private int width, height;
 
-	public FileTexture(FileIO file, String fileName, Bitmap.Config quality) {
-		this.file = file;
+	public FileTexture(AssetManager assets, String fileName, Bitmap.Config quality) {
+		this.file = new FileIO(assets);
 		this.fileName = fileName;
 		this.quality = quality;
 
@@ -65,7 +71,10 @@ public class FileTexture implements Texture {
 		}
 		unbind();
 	}
-
+	
+	/**
+	 * Reloads this texture.
+	 */
 	public void reload() {
 		load();
 		bind();

@@ -4,12 +4,31 @@ import android.opengl.GLES10;
 
 import com.skipifzero.petorsandroidframework.framework.vector.BaseVector2;
 
+/**
+ * Class used for rendering sprites quickly with OpenGL.
+ * 
+ * How to use:
+ * First you need a Texture containing a texture atlas, and TextureRegions with specified
+ * locations on said atlas. Then you begin a batch with the texture and draw the specified
+ * regions. Then you call renderBatch and everything will be drawn.
+ * 
+ * You cannot use more than one SpriteBatcher simultaneously, and you have to be careful to not
+ * do more draws per batch than your specified capacity.
+ * 
+ * @author Peter Hillerström
+ * @version 1
+ */
+
 public class SpriteBatcher {
 	
 	private final float[] verticesBuffer;
 	private final Vertices vertices;
 	private int bufferIndex, spriteAmount;
 	
+	/**
+	 * Creates a new SpriteBatcher with the specified capacity.
+	 * @param capacity the capacity of this SpriteBatcher
+	 */
 	public SpriteBatcher(int capacity) {
 		this.verticesBuffer = new float[capacity*4*4]; //4 vertices per sprite, 4 floats per vertex.
 		this.vertices = new Vertices(capacity*4, capacity*6, false, true); //4 vertices per sprite, max 6 indices per sprite.
@@ -31,12 +50,19 @@ public class SpriteBatcher {
 		vertices.setIndices(indices, 0, indices.length);
 	}
 	
+	/**
+	 * Begins a new batch with the specified Texture.
+	 * @param texture the Texture
+	 */
 	public void beginBatch(Texture texture) {
 		texture.bind();
 		bufferIndex = 0;
 		spriteAmount = 0;
 	}
 	
+	/**
+	 * Renders the batched draws.
+	 */
 	public void renderBatch() {
 		vertices.setVertices(verticesBuffer, 0, bufferIndex);
 		vertices.bind();

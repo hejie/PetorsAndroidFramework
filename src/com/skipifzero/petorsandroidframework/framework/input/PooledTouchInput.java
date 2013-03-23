@@ -14,7 +14,7 @@ import com.skipifzero.petorsandroidframework.framework.input.TouchEvent.TouchTyp
 /**
  * An implementation of the TouchInput interface.
  * This implementation pools TouchEvents, which means that it reuses them. Thus you should never directly store references to TouchEvents
- * return from this implementation, if you really need to store a specific TouchEvent you can just clone it.
+ * returned from this implementation, if you really need to store a specific TouchEvent you can just clone it.
  * 
  * @author Peter Hillerström
  * @version 1
@@ -175,7 +175,7 @@ public class PooledTouchInput implements TouchInput, OnTouchListener {
 			tempEvent = null;
 			
 			/*
-			 * Yes, this bit of code is a bit ugly and hard to read.
+			 * Yes, this bit of code is ugly and hard to read.
 			 * What is basically does is that it selects and removes one event per pointer from the buffered events and places
 			 * it in a temporary list.
 			 */
@@ -274,13 +274,13 @@ public class PooledTouchInput implements TouchInput, OnTouchListener {
 			
 			//Frees filtered events from previous frame.
 			for(int i = 0; i < filteredEvents.size(); i++){		
-				touchEventPool.free(filteredEvents.get(i));
+				touchEventPool.freeObject(filteredEvents.get(i));
 			}
 			filteredEvents.clear();
 			
 			//Frees buffered events.
 			for(int i = 0; i < bufferedEvents.size(); i++){
-				touchEventPool.free(bufferedEvents.get(i));
+				touchEventPool.freeObject(bufferedEvents.get(i));
 			}
 			bufferedEvents.clear();
 						
