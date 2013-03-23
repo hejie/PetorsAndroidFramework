@@ -52,7 +52,7 @@ public class MainScreen implements GLScreen {
 		this.batcher = new SpriteBatcher(100);
 		this.font = new FontRenderer.Builder().build();
 		
-		this.texUtil = new TextureUtil(glActivity.getAssets(), "textures", Config.ARGB_8888);
+		this.texUtil = new TextureUtil("textures", Config.ARGB_8888);
 		this.backgroundRegion = texUtil.getTextureRegion("BackgroundV1_512x512.png");
 		this.objectRegion = texUtil.getTextureRegion("ObjectV1_128x128.png");
 		this.redPixRegion = texUtil.getTextureRegion("1pxRed512.png");

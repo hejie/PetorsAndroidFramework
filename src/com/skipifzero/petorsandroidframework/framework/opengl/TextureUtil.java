@@ -23,7 +23,7 @@ import com.skipifzero.petorsandroidframework.framework.FileIO;
  * all the textures in the specified folder should be of the same size and with a width/height equal to a power of two.
  * 
  * @author Peter Hillerström
- * @version 1
+ * @version 2
  */
 public final class TextureUtil {
 	private static final int MAX_TEXTURE_SIZE = 8192;
@@ -38,25 +38,20 @@ public final class TextureUtil {
 	private TextureRegion[] textureRegions;
 	
 	/**
-	 * Creates a new TextureUtil with the content from the specified directory in the assets folder.
-	 * @param assets the AssetManager
+	 * Creates a new TextureUtil with the specified directory in the assets folder from which this will
+	 * load textures. You must call load before this TextureUtil can be used.
 	 * @param textureDirectory the directory to read textures from
 	 * @param quality the quality of the generated texture atlas
 	 */
-	public TextureUtil(AssetManager assets, String textureDirectory, Bitmap.Config quality) {
+	public TextureUtil(String textureDirectory, Bitmap.Config quality) {
 		this.textureDirectory = textureDirectory;
 		this.quality = quality;
-		
-		load(assets);
 	}
 	
 	/**
-	 * Reloads all the textures from this TextureUtil's folder and creates a new texture atlas and new TextureRegions.
-	 * If you're using this method manually and you're not keeping the previously generated Texture you should probably
-	 * call dispose first.
-	 * The new TextureRegions should be the same as the old ones, so you don't have to worry about them.
-	 * But if you keep a reference to the texture atlas you will have to update it as it no longer
-	 * points to a valid texture.
+	 * Loads all the textures from this TextureUtil's folder and creates a new texture atlas and new TextureRegions.
+	 * If you've previously called this method you should first call dispose before calling this method. The generated
+	 * TextureRegions should be the same as the last time this was loaded.
 	 * @return this TextureUtil
 	 */
 	public TextureUtil load(AssetManager assets) {
