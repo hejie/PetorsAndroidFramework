@@ -11,7 +11,7 @@ import android.graphics.Typeface;
 
 /**
  * A class used for various IO operations.
- * @author Peter Hillerström
+ * @author Peter HillerstrÃ¶m
  * @version 1
  */
 

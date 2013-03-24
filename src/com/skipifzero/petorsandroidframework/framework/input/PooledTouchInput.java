@@ -16,7 +16,7 @@ import com.skipifzero.petorsandroidframework.framework.input.TouchEvent.TouchTyp
  * This implementation pools TouchEvents, which means that it reuses them. Thus you should never directly store references to TouchEvents
  * returned from this implementation, if you really need to store a specific TouchEvent you can just clone it.
  * 
- * @author Peter Hillerström
+ * @author Peter HillerstrÃ¶m
  * @version 1
  */
 

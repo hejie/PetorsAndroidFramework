@@ -2,7 +2,7 @@ package com.skipifzero.petorsandroidframework.framework.vector;
 
 /**
  * A mutable Vector2 implementation.
- * @author Peter Hillerström
+ * @author Peter HillerstrÃ¶m
  * @version 1
  */
 public final class Vector2 extends BaseVector2{

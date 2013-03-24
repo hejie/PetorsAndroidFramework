@@ -9,7 +9,7 @@ import com.skipifzero.petorsandroidframework.framework.vector.Vector2;
  * A class used for setting the OpenGL viewport and setting the projection type to 2D.
  * Basically the size and position of this camera is relative to an internal coordinate system.
  * 
- * @author Peter Hillerström
+ * @author Peter HillerstrÃ¶m
  * @version 1
  */
 public class Camera2D {

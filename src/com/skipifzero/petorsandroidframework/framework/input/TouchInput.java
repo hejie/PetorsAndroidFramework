@@ -4,7 +4,7 @@ import java.util.List;
 
 /**
  * An interface for getting touch input.
- * @author Peter Hillerström
+ * @author Peter HillerstrÃ¶m
  * @version 1
  */
 

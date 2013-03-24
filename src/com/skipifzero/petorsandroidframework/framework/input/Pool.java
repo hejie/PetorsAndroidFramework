@@ -7,14 +7,14 @@ import java.util.List;
  * A class used to pool objects. 
  * @param <T> the class to pool
  * 
- *  @author Peter Hillerström
+ *  @author Peter HillerstrÃ¶m
  *  @version 1
  */
 public class Pool<T> {
 
 	/**
 	 * Interface for a factory to create an object of T type.
-	 * @author Peter Hillerström
+	 * @author Peter HillerstrÃ¶m
 	 * @version 1
 	 * @param <T> the class to create
 	 */

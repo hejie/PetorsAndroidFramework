@@ -9,7 +9,7 @@ import com.skipifzero.petorsandroidframework.framework.FileIO;
 
 /**
  * An implementation of Texture that takes a path to an image in the assets folder as the argument.
- * @author Peter Hillerström
+ * @author Peter HillerstrÃ¶m
  * @version 1
  */
 public class FileTexture implements Texture {

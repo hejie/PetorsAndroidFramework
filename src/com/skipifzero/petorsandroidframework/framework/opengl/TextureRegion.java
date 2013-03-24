@@ -6,7 +6,7 @@ package com.skipifzero.petorsandroidframework.framework.opengl;
  * 
  * Primarily used to store multiple sprites on the same Texture and enable use of a SpriteBatcher.
  * 
- * @author Peter Hillerström
+ * @author Peter HillerstrÃ¶m
  * @version 1
  */
 public class TextureRegion {

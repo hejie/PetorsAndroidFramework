@@ -10,7 +10,7 @@ import com.skipifzero.petorsandroidframework.framework.vector.Vector2;
  * If you need to store a particular TouchEvent in your program you should clone it instead
  * of keeping a reference since the content of the TouchEvent might change if it is reused.
  * 
- * @author Peter Hillerström
+ * @author Peter HillerstrÃ¶m
  * @version 2
  */
 public final class TouchEvent implements Cloneable {

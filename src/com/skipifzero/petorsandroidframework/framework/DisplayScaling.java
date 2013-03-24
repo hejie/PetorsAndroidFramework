@@ -11,7 +11,7 @@ import android.view.WindowManager;
  * Virtual pixels with a dpi of 160.
  * pixel = dp * (screenDPI / 160)
  * 
- * @author Peter Hillerström
+ * @author Peter HillerstrÃ¶m
  * @version 1
  */
 public class DisplayScaling {

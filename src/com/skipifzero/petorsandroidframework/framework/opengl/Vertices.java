@@ -9,7 +9,7 @@ import android.opengl.GLES10;
 
 /**
  * A class used for storing Vertices.
- * @author Peter Hillerström
+ * @author Peter HillerstrÃ¶m
  * @version 1
  */
 public class Vertices {

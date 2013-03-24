@@ -5,7 +5,7 @@ package com.skipifzero.petorsandroidframework.framework.vector;
  * The instance variables are protected, therefore it is important that this class is placed in its own 
  * package together with the other vectors classes. Otherwise someone might be able to mutate objects of
  * this class.
- * @author Peter Hillerström
+ * @author Peter HillerstrÃ¶m
  * @version 1
  */
 public final class FinalVector2 extends BaseVector2 {

@@ -15,7 +15,7 @@ import com.skipifzero.petorsandroidframework.framework.vector.BaseVector2;
  * You cannot use more than one SpriteBatcher simultaneously, and you have to be careful to not
  * do more draws per batch than your specified capacity.
  * 
- * @author Peter Hillerström
+ * @author Peter HillerstrÃ¶m
  * @version 1
  */
 

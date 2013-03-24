@@ -20,7 +20,7 @@ import com.skipifzero.petorsandroidframework.framework.input.BackKeyInput;
  * Extend this class, implement the needed methods, supply a GLScreen to start with and
  * start this Activity.
  * 
- * @author Peter Hillerström
+ * @author Peter HillerstrÃ¶m
  * @version 1
  */
 public abstract class GLActivity extends Activity implements Renderer {

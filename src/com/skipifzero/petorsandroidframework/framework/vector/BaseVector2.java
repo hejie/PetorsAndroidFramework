@@ -4,7 +4,7 @@ package com.skipifzero.petorsandroidframework.framework.vector;
  * An abstract class used for 2 dimensional vector implementations (Vector2 and its immutable counterpart FinalVector2).
  * This class's internal variables are protected, so it's important this class and its implementations are placed alone 
  * in its own package. Otherwise there is a risk someone directly accesses the instance variables in FinalVector2.
- * @author Peter Hillerström
+ * @author Peter HillerstrÃ¶m
  * @version 1
  */
 public abstract class BaseVector2 implements Cloneable, Comparable<BaseVector2> {

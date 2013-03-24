@@ -21,7 +21,7 @@ import com.skipifzero.petorsandroidframework.framework.vector.Vector2;
  * Based on http://fractiousg.blogspot.se/2012/04/rendering-text-in-opengl-on-android.html.
  * 
  * @version 1
- * @author Peter Hillerström
+ * @author Peter HillerstrÃ¶m
  */
 public class FontRenderer {
 	

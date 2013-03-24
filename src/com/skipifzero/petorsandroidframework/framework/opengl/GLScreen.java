@@ -7,7 +7,7 @@ package com.skipifzero.petorsandroidframework.framework.opengl;
  * of the GLActivity it is running in. Otherwise it will be impossible to do stuff like
  * checking if the back button is pressed, or switch to other GLScreens.
  * 
- * @author Peter Hillerström
+ * @author Peter HillerstrÃ¶m
  * @version 1
  */
 public interface GLScreen {

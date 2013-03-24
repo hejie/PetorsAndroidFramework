@@ -2,7 +2,7 @@ package com.skipifzero.petorsandroidframework.framework.opengl;
 
 /**
  * An interface for OpenGL textures.
- * @author Peter Hillerström
+ * @author Peter HillerstrÃ¶m
  * @version 1
  */
 public interface Texture {

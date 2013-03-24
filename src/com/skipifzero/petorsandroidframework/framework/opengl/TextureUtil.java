@@ -22,7 +22,7 @@ import com.skipifzero.petorsandroidframework.framework.FileIO;
  * largest texture and then create "cells" which it will place each texture in. So to use this class most efficiently
  * all the textures in the specified folder should be of the same size and with a width/height equal to a power of two.
  * 
- * @author Peter Hillerström
+ * @author Peter HillerstrÃ¶m
  * @version 2
  */
 public final class TextureUtil {
