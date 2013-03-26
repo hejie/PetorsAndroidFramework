@@ -2,8 +2,8 @@ package com.skipifzero.petorsandroidframework.framework.opengl;
 
 import android.opengl.GLES10;
 
-import com.skipifzero.petorsandroidframework.framework.vector.BaseVector2;
-import com.skipifzero.petorsandroidframework.framework.vector.Vector2;
+import com.skipifzero.petorsandroidframework.framework.math.BaseVector2;
+import com.skipifzero.petorsandroidframework.framework.math.Vector2;
 
 /**
  * A class used for setting the OpenGL viewport and setting the projection type to 2D.

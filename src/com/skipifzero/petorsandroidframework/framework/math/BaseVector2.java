@@ -1,4 +1,4 @@
-package com.skipifzero.petorsandroidframework.framework.vector;
+package com.skipifzero.petorsandroidframework.framework.math;
 
 /**
  * An abstract class used for 2 dimensional vector implementations (Vector2 and its immutable counterpart FinalVector2).

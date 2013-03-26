@@ -1,4 +1,4 @@
-package com.skipifzero.petorsandroidframework.framework.vector;
+package com.skipifzero.petorsandroidframework.framework.math;
 
 /**
  * An immutable 2 dimensional Vector2 implementation.

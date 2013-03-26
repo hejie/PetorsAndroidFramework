@@ -2,7 +2,7 @@ package com.skipifzero.petorsandroidframework.framework.opengl;
 
 import android.opengl.GLES10;
 
-import com.skipifzero.petorsandroidframework.framework.vector.BaseVector2;
+import com.skipifzero.petorsandroidframework.framework.math.BaseVector2;
 
 /**
  * Class used for rendering sprites quickly with OpenGL.

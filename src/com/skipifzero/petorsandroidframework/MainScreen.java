@@ -7,6 +7,7 @@ import android.opengl.GLES10;
 import com.skipifzero.petorsandroidframework.framework.DisplayScaling;
 import com.skipifzero.petorsandroidframework.framework.input.PooledTouchInput;
 import com.skipifzero.petorsandroidframework.framework.input.TouchInput;
+import com.skipifzero.petorsandroidframework.framework.math.FinalVector2;
 import com.skipifzero.petorsandroidframework.framework.opengl.Camera2D;
 import com.skipifzero.petorsandroidframework.framework.opengl.FontRenderer;
 import com.skipifzero.petorsandroidframework.framework.opengl.GLActivity;
@@ -15,7 +16,6 @@ import com.skipifzero.petorsandroidframework.framework.opengl.SpriteBatcher;
 import com.skipifzero.petorsandroidframework.framework.opengl.Texture;
 import com.skipifzero.petorsandroidframework.framework.opengl.TextureRegion;
 import com.skipifzero.petorsandroidframework.framework.opengl.TextureUtil;
-import com.skipifzero.petorsandroidframework.framework.vector.FinalVector2;
 
 public class MainScreen implements GLScreen {
 

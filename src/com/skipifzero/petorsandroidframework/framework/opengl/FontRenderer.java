@@ -7,8 +7,8 @@ import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.opengl.GLES10;
 
-import com.skipifzero.petorsandroidframework.framework.vector.BaseVector2;
-import com.skipifzero.petorsandroidframework.framework.vector.Vector2;
+import com.skipifzero.petorsandroidframework.framework.math.BaseVector2;
+import com.skipifzero.petorsandroidframework.framework.math.Vector2;
 
 /**
  * A FontRenderer for OpenGL ES 1.0.

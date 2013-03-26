@@ -1,6 +1,6 @@
 package com.skipifzero.petorsandroidframework.framework.input;
 
-import com.skipifzero.petorsandroidframework.framework.vector.Vector2;
+import com.skipifzero.petorsandroidframework.framework.math.Vector2;
 
 
 /**
