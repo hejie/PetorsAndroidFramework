@@ -21,7 +21,8 @@ import com.skipifzero.petorsandroidframework.framework.input.BackKeyInput;
  * start this Activity.
  * 
  * @author Peter Hillerström
- * @version 1
+ * @since 2013-03-28
+ * @version 2
  */
 public abstract class GLActivity extends Activity implements Renderer {
 	
@@ -213,6 +214,26 @@ public abstract class GLActivity extends Activity implements Renderer {
 		//Dispose of old GLScreen
 		this.glScreen.onPause();
 		this.glScreen.dipose();
+		
+		//Resumes new GLScreen
+		glScreen.onResume();
+		glScreen.update(0.0, 0); //TODO: Not sure if necessary or good idea.
+		this.glScreen = glScreen;
+		
+		catchBackKey(catchBackKey);
+	}
+	
+	/**
+	 * Special version of changeGLScreen(), won't call pause() or dispose() in old GLScreen. Can for
+	 * example be used if assets are transferred between GLScreen's.
+	 * Can be called from anywhere within a GLScreen. Will pause and dipose of old GLScreen.
+	 * @throws IllegalArgumentException if new GLScreen is null
+	 * @param glScreen the new GLScreen
+	 */
+	public void changeGLScreenDontDispose(GLScreen glScreen, boolean catchBackKey) {
+		if(glScreen == null) {
+			throw new IllegalArgumentException("New GLScreen is null, not allowed.");
+		}
 		
 		//Resumes new GLScreen
 		glScreen.onResume();
