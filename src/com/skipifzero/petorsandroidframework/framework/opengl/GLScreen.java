@@ -1,43 +1,53 @@
 package com.skipifzero.petorsandroidframework.framework.opengl;
 
+
 /**
- * Interface used for having different views inside a GLActivity.
- * 
- * A recommendation is to make sure the implementation of this interface gets an instance
- * of the GLActivity it is running in. Otherwise it will be impossible to do stuff like
- * checking if the back button is pressed, or switch to other GLScreens.
+ * An abstract class combining a GLController and a GLView into one "GLScreen". Useful if you have a
+ * GLController with only one GLView, or if you're porting a program from an older version of my
+ * framework, or if you're to simply to lazy to make proper mvc. ;)
  * 
  * @author Peter Hillerström
+ * @since 2013-04-03
  * @version 1
  */
-public interface GLScreen {
+public abstract class GLScreen implements GLController, GLView {
+
+	private final GLActivity glActivity;
+	
+	public GLScreen(GLActivity glActivity) {
+		this.glActivity = glActivity;
+	}
 	
 	/**
-	 * Called once each frame, called before draw().
+	 * Returns the GLActivity running this GLController.
+	 * @return the GLActivity running this GLController
+	 */
+	public final GLActivity getGLActivity() {
+		return glActivity;
+	}
+		
+	@Override
+	public final void update(double deltaTime, int fps) {
+		update(fps, deltaTime);
+		draw(deltaTime, fps);
+	}
+	
+	/**
+	 * Called once each frame.
 	 * @param deltaTime the time in seconds since the last frame
 	 * @param fps the amount of rendered frames the last second
 	 */
-	public void update(double deltaTime, int fps);
+	public abstract void update(int fps, double deltaTime); //Yes, I'm clearly a genius.
 	
-	/**
-	 * Called once each frame, called after update().
-	 * @param deltaTime the time in seconds since the last frame
-	 * @param fps the amount of rendered frames the last second
-	 */
-	public void draw(double deltaTime, int fps);
-	
-	/**
-	 * Called when Activity is resumed and when this GLScreen is created.
-	 */
-	public void onResume();
-	
-	/**
-	 * Called when Activity is paused.
-	 */
-	public void onPause();
-	
-	/**
-	 * Called when Activity is destroyed and when this GLScreen is destroyed.
-	 */
-	public void dipose();
+	@Override
+	public abstract void draw(double deltaTime, int fps);
+
+	@Override
+	public abstract void onResume();
+
+	@Override
+	public abstract void onPause();
+
+	@Override
+	public abstract void dispose();
 }

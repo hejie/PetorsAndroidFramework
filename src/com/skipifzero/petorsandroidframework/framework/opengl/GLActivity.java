@@ -17,22 +17,22 @@ import com.skipifzero.petorsandroidframework.framework.input.BackKeyInput;
  * Class used to make it easier to create Activities using OpenGL ES.
  * 
  * How to use:
- * Extend this class, implement the needed methods, supply a GLScreen to start with and
+ * Extend this class, implement the needed methods, supply a GLController to start with and
  * start this Activity.
  * 
  * @author Peter Hillerström
- * @since 2013-03-28
- * @version 2
+ * @since 2013-04-03
+ * @version 3
  */
 public abstract class GLActivity extends Activity implements Renderer {
 	
-	//States used to make sure everything in the GLScreen happens on the rendering thread.
+	//States used to make sure everything in the GLController happens on the rendering thread.
 	private enum State {
 		STARTING, RUNNING, PAUSING, FINISHING, SLEEPING;
 	}
 	
 	private GLSurfaceView glSurfaceView;
-	private GLScreen glScreen;
+	private GLController glController;
 	
 	private volatile State state;
 	
@@ -106,11 +106,11 @@ public abstract class GLActivity extends Activity implements Renderer {
 		deltaTime = 0;
 		
 		synchronized(this) {
-			if(state == State.STARTING) { //Gets initial GLScreen if program is starting up.
-				glScreen = getInitialGLScreen(this);
+			if(state == State.STARTING) { //Gets initial GLController if program is starting up.
+				glController = getInitialGLController(this);
 			}
 			state = State.RUNNING; //Surface was created, so program is running.
-			glScreen.onResume();
+			glController.onResume();
 		}
 	}
 	
@@ -144,13 +144,12 @@ public abstract class GLActivity extends Activity implements Renderer {
 					lastFPSCount = System.nanoTime();
 				}
 				
-				//Calls current GLScreen's update and draw methods.
-				glScreen.update(deltaTime, fps);
-				glScreen.draw(deltaTime, fps);
+				//Updates current GLController and GLView
+				glController.update(deltaTime, fps);
 				break;
 			
 			case PAUSING:
-				glScreen.onPause();
+				glController.onPause();
 				synchronized(this) {
 					this.state = State.SLEEPING;
 					this.notifyAll();
@@ -158,8 +157,8 @@ public abstract class GLActivity extends Activity implements Renderer {
 				break;
 			
 			case FINISHING:
-				glScreen.onPause();
-				glScreen.dipose();
+				glController.onPause();
+				glController.dispose();
 				synchronized(this) {
 					this.state = State.SLEEPING;
 					this.notifyAll();
@@ -179,19 +178,17 @@ public abstract class GLActivity extends Activity implements Renderer {
 	 */
 	
 	/**
-	 * This method should return the initial GLScreen, it may not return null. Is called on the
+	 * This method should return the initial GLController, it may not return null. Is called on the
 	 * rendering thread in the onSurfaceCreated methods.
 	 * Probably not the standard way of doing things, but don't really have a choice due to how
 	 * Android activities work.
-	 * @return initial GLScreen
+	 * @return initial GLController
 	 */
-	public abstract GLScreen getInitialGLScreen(GLActivity glActivity);
+	public abstract GLController getInitialGLController(GLActivity glActivity);
 	
 	/**
-	 * This method returns the fullscreen status.
-	 * True = fullscreen enabled
-	 * False = fullscreen disabled
-	 * @return fullScreen
+	 * This method returns whether fullscreen should be enabled or not.
+	 * @return whether fullscreen should be enabled or not
 	 */
 	public abstract boolean enableFullscreenMode();
 	
@@ -201,44 +198,44 @@ public abstract class GLActivity extends Activity implements Renderer {
 	 */
 	
 	/**
-	 * Changes screen.
-	 * Can be called from anywhere within a GLScreen. Will pause and dipose of old GLScreen.
-	 * @throws IllegalArgumentException if new GLScreen is null
-	 * @param glScreen the new GLScreen
+	 * Changes GLController
+	 * Can be called from anywhere within a GLController. Will pause and dipose of old GLController.
+	 * @throws IllegalArgumentException if new GLController is null
+	 * @param glController the new GLController
 	 */
-	public void changeGLScreen(GLScreen glScreen, boolean catchBackKey) {
-		if(glScreen == null) {
-			throw new IllegalArgumentException("New GLScreen is null, not allowed.");
+	public void changeGLController(GLController glController, boolean catchBackKey) {
+		if(glController == null) {
+			throw new IllegalArgumentException("New GLController is null, not allowed.");
 		}
 		
-		//Dispose of old GLScreen
-		this.glScreen.onPause();
-		this.glScreen.dipose();
+		//Dispose of old GLController
+		this.glController.onPause();
+		this.glController.dispose();
 		
-		//Resumes new GLScreen
-		glScreen.onResume();
-		glScreen.update(0.0, 0); //TODO: Not sure if necessary or good idea.
-		this.glScreen = glScreen;
+		//Resumes new GLController
+		glController.onResume();
+		glController.update(0.0, 0); //TODO: Not sure if necessary or good idea.
+		this.glController = glController;
 		
 		catchBackKey(catchBackKey);
 	}
 	
 	/**
-	 * Special version of changeGLScreen(), won't call pause() or dispose() in old GLScreen. Can for
-	 * example be used if assets are transferred between GLScreen's.
-	 * Can be called from anywhere within a GLScreen. Will pause and dipose of old GLScreen.
-	 * @throws IllegalArgumentException if new GLScreen is null
-	 * @param glScreen the new GLScreen
+	 * Special version of changeGLController(), won't call pause() or dispose() in old GLController. 
+	 * Can for example be used if assets are transferred between GLController's.
+	 * Can be called from anywhere within a GLController. Will pause and dipose of old GLController.
+	 * @throws IllegalArgumentException if new GLController is null
+	 * @param glController the new GLController
 	 */
-	public void changeGLScreenDontDispose(GLScreen glScreen, boolean catchBackKey) {
-		if(glScreen == null) {
-			throw new IllegalArgumentException("New GLScreen is null, not allowed.");
+	public void changeGLControllerDontDispose(GLController glController, boolean catchBackKey) {
+		if(glController == null) {
+			throw new IllegalArgumentException("New GLController is null, not allowed.");
 		}
 		
-		//Resumes new GLScreen
-		glScreen.onResume();
-		glScreen.update(0.0, 0); //TODO: Not sure if necessary or good idea.
-		this.glScreen = glScreen;
+		//Resumes new GLController
+		glController.onResume();
+		glController.update(0.0, 0); //TODO: Not sure if necessary or good idea.
+		this.glController = glController;
 		
 		catchBackKey(catchBackKey);
 	}

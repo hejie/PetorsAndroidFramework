@@ -17,9 +17,7 @@ import com.skipifzero.petorsandroidframework.framework.opengl.Texture;
 import com.skipifzero.petorsandroidframework.framework.opengl.TextureRegion;
 import com.skipifzero.petorsandroidframework.framework.opengl.TextureUtil;
 
-public class MainScreen implements GLScreen {
-
-	private final GLActivity glActivity;
+public class MainScreen extends GLScreen {
 	
 	private final TouchInput input;
 	private final DisplayScaling scaling;
@@ -39,7 +37,7 @@ public class MainScreen implements GLScreen {
 	private double angle = 0;
 	
 	public MainScreen(GLActivity glActivity) {
-		this.glActivity = glActivity;
+		super(glActivity);
 		
 		this.input = new PooledTouchInput(glActivity.getGLSurfaceView(), 10);
 		this.scaling = new DisplayScaling(glActivity.getGLSurfaceView(), glActivity.getWindowManager());
@@ -52,7 +50,7 @@ public class MainScreen implements GLScreen {
 		this.batcher = new SpriteBatcher(100);
 		this.font = new FontRenderer.Builder().build();
 		
-		this.texUtil = new TextureUtil("textures", Config.ARGB_8888);
+		this.texUtil = new TextureUtil("textures", Config.ARGB_8888).load(glActivity.getAssets());
 		this.backgroundRegion = texUtil.getTextureRegion("BackgroundV1_512x512.png");
 		this.objectRegion = texUtil.getTextureRegion("ObjectV1_128x128.png");
 		this.redPixRegion = texUtil.getTextureRegion("1pxRed512.png");
@@ -60,12 +58,13 @@ public class MainScreen implements GLScreen {
 	
 	@Override
 	public void onResume() {
-		texUtil.load(glActivity.getAssets()); //Reloads textures
+		texUtil.load(getGLActivity().getAssets()); //Reloads textures
 		this.texture = texUtil.getTextureAtlas();
+		font.reload();
 	}
 	
 	@Override
-	public void update(double deltaTime, int fps) {
+	public void update(int fps, double deltaTime) {
 		input.update();
 		
 		angle += 50*deltaTime;
@@ -87,7 +86,7 @@ public class MainScreen implements GLScreen {
 		//Enable textures
 		GLES10.glEnable(GLES10.GL_TEXTURE_2D);
 	
-		camera.initialize(glActivity.getViewWidth(), glActivity.getViewHeight());
+		camera.initialize(getGLActivity().getViewWidth(), getGLActivity().getViewHeight());
 		
 		batcher.beginBatch(texture);
 		
@@ -110,7 +109,8 @@ public class MainScreen implements GLScreen {
 	}
 
 	@Override
-	public void dipose() {
+	public void dispose() {
 		texUtil.dispose();
+		font.dispose();
 	}
 }

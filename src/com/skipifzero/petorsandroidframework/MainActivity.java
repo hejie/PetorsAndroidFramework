@@ -6,7 +6,7 @@ import com.skipifzero.petorsandroidframework.framework.opengl.GLScreen;
 public class MainActivity extends GLActivity {
 
 	@Override
-	public GLScreen getInitialGLScreen(GLActivity glActivity) {
+	public GLScreen getInitialGLController(GLActivity glActivity) {
 		return new MainScreen(glActivity);
 	}
 
