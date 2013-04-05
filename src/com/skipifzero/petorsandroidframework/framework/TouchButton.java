@@ -33,12 +33,28 @@ import com.skipifzero.petorsandroidframework.framework.math.Vector2;
 public class TouchButton {
 	
 	/**
+	 * Interface for listener to be called when a TouchButton is activated.
+	 * @author Peter Hillerström
+	 * @since 2013-04-05
+	 * @version 1
+	 */
+	public interface TouchButtonListener {
+		/**
+		 * Called each frame one of the TouchButton's this listener is registered to is activated.
+		 * @param source the TouchButton that is activated
+		 */
+		public void onButtonActivated(TouchButton source);
+	}
+	
+	/**
 	 * Enum to determine type of TouchButton.
 	 */
 	public enum TouchButtonType {
 		ACTIVATE_ON_TOUCH, ACTIVATE_WHILE_TOUCHED, ACTIVATE_ON_RELEASE;
 	}
 		
+	private final List<TouchButtonListener> listeners;
+	
 	private final TouchButtonType type;
 	private final BoundingRectangle bounds;
 	private boolean touched, activated;
@@ -55,6 +71,7 @@ public class TouchButton {
 	 * @param type the specified type
 	 */
 	public TouchButton(BaseVector2 position, double width, double height, TouchButtonType type) {
+		this.listeners = new ArrayList<TouchButtonListener>();
 		this.bounds = new BoundingRectangle(position, width, height);
 		this.type = type;
 		this.touched = false;
@@ -70,6 +87,7 @@ public class TouchButton {
 	 * @param type the specified type
 	 */
 	public TouchButton(double x, double y, double width, double height, TouchButtonType type) {
+		this.listeners = new ArrayList<TouchButtonListener>();
 		this.bounds = new BoundingRectangle(x, y, width, height);
 		this.type = type;
 		this.touched = false;
@@ -80,8 +98,9 @@ public class TouchButton {
 	 * Updates this TouchButton's activated and touched states depending on the list of TouchEvents.
 	 * Should be called every frame.
 	 * @param touchEvents the list of TouchEvents.
+	 * @return whether this button is currently activated or not
 	 */
-	public void update(List<TouchEvent> touchEvents) {
+	public boolean update(List<TouchEvent> touchEvents) {
 		
 		//Checks if button is touched
 		touched = false;
@@ -125,6 +144,15 @@ public class TouchButton {
 		}
 		
 		currentlyTouching.clear();
+		
+		//Notifies listeners if this TouchButton is activated this frame
+		if(activated) {
+			for(TouchButtonListener listener : listeners) {
+				listener.onButtonActivated(this);
+			}
+		}
+		
+		return activated;
 	}
 	
 	/*
@@ -146,6 +174,24 @@ public class TouchButton {
 	 */
 	public boolean isActivated() {
 		return activated;
+	}
+	
+	/**
+	 * Adds the specified TouchButtonListener to the list of listeners to be notified every frame
+	 * this TouchButton is activated.
+	 * @param listener the specified TouchButtonListener
+	 */
+	public void addTouchButtonListener(TouchButtonListener listener) {
+		listeners.add(listener);
+	}
+	
+	/**
+	 * Removes the specified TouchButtonListener from the list of listeners to be notified every
+	 * frame this TouchButton is activated.
+	 * @param listener the specified TouchButtonListener
+	 */
+	public void removeTouchButtonListener(TouchButtonListener listener) {
+		listeners.remove(listener);
 	}
 	
 	/*
