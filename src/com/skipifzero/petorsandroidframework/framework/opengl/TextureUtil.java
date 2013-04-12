@@ -2,7 +2,13 @@ package com.skipifzero.petorsandroidframework.framework.opengl;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import android.content.res.AssetManager;
 import android.graphics.Bitmap;
@@ -13,8 +19,7 @@ import com.skipifzero.petorsandroidframework.framework.FileIO;
 
 /**
  * A class used for loading textures from a directory and generating a texture atlas and corresponding
- * TextureRegions. All getters give direct references to internal arrays or variables, so this class is
- * indirectly mutable.
+ * TextureRegions. 
  * 
  * In the specified directory there must only be image files, otherwise this class will probably crash when loading.
  * 
@@ -23,7 +28,8 @@ import com.skipifzero.petorsandroidframework.framework.FileIO;
  * all the textures in the specified folder should be of the same size and with a width/height equal to a power of two.
  * 
  * @author Peter Hillerström
- * @version 2
+ * @since 2013-04-12
+ * @version 3
  */
 public final class TextureUtil {
 	private static final int MAX_TEXTURE_SIZE = 8192;
@@ -32,11 +38,10 @@ public final class TextureUtil {
 	private final String textureDirectory;
 	private final Bitmap.Config quality;
 	
-	private String[] textureRegionStrings;
 	private Texture texture;
 	private TextureRegion textureAtlasRegion;
-	private TextureRegion[] textureRegions;
-	
+	private Map<String, TextureRegion> textureRegions = new HashMap<String, TextureRegion>();
+
 	/**
 	 * Creates a new TextureUtil with the specified directory in the assets folder from which this will
 	 * load textures. You must call load before this TextureUtil can be used.
@@ -55,11 +60,11 @@ public final class TextureUtil {
 	 * @return this TextureUtil
 	 */
 	public TextureUtil load(AssetManager assets) {
-		this.textureRegionStrings = loadFileNames(assets);
+		List<String> textureRegionStrings = loadFileNames(assets);
 		
-		Bitmap[] bitmaps = loadBitmaps(assets, this.textureDirectory, this.textureRegionStrings, quality);	
+		List<Bitmap> bitmaps = loadBitmaps(assets, this.textureDirectory, textureRegionStrings, quality);	
 		int largestBitmapSize = getLargestBitmapSize(bitmaps);
-		int textureSize = getTextureSize(largestBitmapSize, bitmaps.length);
+		int textureSize = getTextureSize(largestBitmapSize, bitmaps.size());
 				
 		//Create bitmap atlas and drawing tools.
 		Bitmap bitmapAtlas = Bitmap.createBitmap(textureSize, textureSize, quality);
@@ -67,16 +72,16 @@ public final class TextureUtil {
 		Paint paint = new Paint();
 		
 		//Arrays with values for creation of TextureRegions.
-		float[] xLeftArray = new float[bitmaps.length];
-		float[] yTopArray = new float[bitmaps.length];
+		float[] xLeftArray = new float[bitmaps.size()];
+		float[] yTopArray = new float[bitmaps.size()];
 		
 		//Temp variables 
 		float xLeft = 0;
 		float yTop = 0;
 		
 		//Draws all textures to the texture atlas.
-		for(int i = 0; i < bitmaps.length; i++) {
-			canvas.drawBitmap(bitmaps[i], xLeft, yTop, paint);
+		for(int i = 0; i < bitmaps.size(); i++) {
+			canvas.drawBitmap(bitmaps.get(i), xLeft, yTop, paint);
 			
 			//Stores drawn location for creation of TextureRegions.
 			xLeftArray[i] = xLeft;
@@ -97,13 +102,15 @@ public final class TextureUtil {
 		bitmapAtlas.recycle(); //Recycles bitmap texture atlas.
 		
 		//Creates TextureRegions for each individual texture on the texture atlas.
-		textureRegions = new TextureRegion[bitmaps.length];
-		for(int i = 0; i < bitmaps.length; i++) {
-			textureRegions[i] = new TextureRegion(texture, xLeftArray[i] + TEXTURE_REGION_DELTA, yTopArray[i] + TEXTURE_REGION_DELTA, bitmaps[i].getWidth() - 2*TEXTURE_REGION_DELTA, bitmaps[i].getHeight() - 2*TEXTURE_REGION_DELTA);
+		//textureRegions = new TextureRegion[bitmaps.size()];
+		TextureRegion temp;
+		for(int i = 0; i < bitmaps.size(); i++) {
+			temp = new TextureRegion(texture, xLeftArray[i] + TEXTURE_REGION_DELTA, yTopArray[i] + TEXTURE_REGION_DELTA, bitmaps.get(i).getWidth() - 2*TEXTURE_REGION_DELTA, bitmaps.get(i).getHeight() - 2*TEXTURE_REGION_DELTA);
 		
-			bitmaps[i].recycle(); //Recycles bitmap texture.
+			textureRegions.put(textureRegionStrings.get(i), temp);
+			
+			bitmaps.get(i).recycle(); //Recycles bitmap texture.
 		}
-		
 		return this;
 	}
 	
@@ -125,11 +132,11 @@ public final class TextureUtil {
 	}
 	
 	/**
-	 * Returns a String array with all the filenames of the files in the texture directory.
+	 * Returns a String collection with all the filenames of the files in the texture directory.
 	 * @return texture names
 	 */
-	public String[] getTextureNames() {
-		return textureRegionStrings;
+	public Collection<String> getTextureNames() {
+		return textureRegions.keySet();
 	}
 	
 	/**
@@ -150,23 +157,34 @@ public final class TextureUtil {
 	
 	/**
 	 * Returns a TextureRegion containing the specified texture.
-	 * @param textureFileName the file name of the texture
+	 * @param textureFileName the file name of the {@link Texture}
+	 * @throws IllegalArgumentException if texture doesn't exist
 	 * @return TextureRegion containing the specified texture
 	 */
 	public TextureRegion getTextureRegion(String textureFileName) {
-		int index = Arrays.binarySearch(textureRegionStrings, textureFileName);
-		if(index < 0 ) {
+		if(!textureRegions.containsKey(textureFileName)) {
 			throw new IllegalArgumentException(textureFileName + " doesn't exist in selected TextureUtil.");
 		}
-		return textureRegions[Arrays.binarySearch(textureRegionStrings, textureFileName)];
+		return textureRegions.get(textureFileName);
 	}
 	
 	/**
-	 * Returns a TextureRegion array containing all the textures in this TextureUtil's directory.
-	 * @return TextureRegion array containing all the textures in this TextureUtil's directory
+	 * Returns a TextureRegion containing the specified texture.
+	 * Same as "getTextureRegion()", but doesn't check if the specified texture exists and simply
+	 * returns null if it doesn't.
+	 * @param texturefileName the file name of the texture
+	 * @return TextureRegion containing the specified texture
 	 */
-	public TextureRegion[] getTextureRegions() {
-		return textureRegions;
+	public TextureRegion getTextureRegionNoChecks(String texturefileName) {
+		return textureRegions.get(texturefileName);
+	}
+	
+	/**
+	 * Returns a TextureRegion collection containing all the textures in this TextureUtil's directory.
+	 * @return TextureRegion collection containing all the textures in this TextureUtil's directory
+	 */
+	public Collection<TextureRegion> getTextureRegions() {
+		return textureRegions.values();
 	}
 	
 	/*
@@ -191,7 +209,7 @@ public final class TextureUtil {
 		return textureSize;
 	}
 	
-	private int getLargestBitmapSize(Bitmap[] bitmaps) {
+	private int getLargestBitmapSize(List<Bitmap> bitmaps) {
 		int width = 0;
 		int height = 0;
 		for(Bitmap bitmap : bitmaps) {
@@ -205,19 +223,19 @@ public final class TextureUtil {
 		return width > height ? width : height;
 	}
 	
-	private Bitmap[] loadBitmaps(AssetManager assets, String directory, String[] fileNames, Bitmap.Config config) {
+	private List<Bitmap> loadBitmaps(AssetManager assets, String directory, Collection<String> fileNames, Bitmap.Config config) {
 		FileIO file = new FileIO(assets);
-		Bitmap[] bitmaps = new Bitmap[fileNames.length];
-		for(int i = 0; i < fileNames.length; i++) {
-			bitmaps[i] = file.loadBitmap(directory + File.separator + fileNames[i], config);
+		List<Bitmap> bitmaps = new ArrayList<Bitmap>(fileNames.size());
+		for(String fileName : fileNames) {
+			bitmaps.add(file.loadBitmap(directory + File.separator + fileName, config));
 		}
 		return bitmaps;
 	}
 	
-	private String[] loadFileNames(AssetManager assets) {
+	private List<String> loadFileNames(AssetManager assets) {
 		try {
-			String[] files = assets.list(textureDirectory);
-			Arrays.sort(files);
+			List<String> files = Arrays.asList(assets.list(textureDirectory));
+			Collections.sort(files);
 			return files;
 		} catch (IOException e) {
 			throw new IllegalArgumentException("Couldn't load texture file names from texture directory");
