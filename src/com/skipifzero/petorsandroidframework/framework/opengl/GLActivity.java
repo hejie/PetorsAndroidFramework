@@ -4,6 +4,7 @@ import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
 import android.app.Activity;
+import android.media.AudioManager;
 import android.opengl.GLSurfaceView;
 import android.opengl.GLSurfaceView.Renderer;
 import android.os.Bundle;
@@ -57,11 +58,13 @@ public abstract class GLActivity extends Activity implements Renderer {
 			getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 		}
 		
+		//Sets VolumeControlStream to STREAM_MUSIC
+		this.setVolumeControlStream(AudioManager.STREAM_MUSIC);
+		
 		glSurfaceView = new GLSurfaceView(this);
 		glSurfaceView.setRenderer(this);
 		
 		setContentView(glSurfaceView);
-		
 		
 		keyInput = new BackKeyInput(glSurfaceView, false);
 	}
