@@ -25,7 +25,7 @@ public class TransformingTextEntity implements TextEntity {
 	private double currentTextSize;
 	
 	//Difference
-	private static final Vector2 posDiff = new Vector2(0,0);
+	private final Vector2 posDiff = new Vector2(0,0);
 	private double sizeDiff, angleDiff;
 	
 	//Temp variables
