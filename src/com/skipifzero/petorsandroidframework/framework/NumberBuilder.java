@@ -54,6 +54,7 @@ public class NumberBuilder {
 	/**
 	 * Returns the string.
 	 */
+	@Override
 	public String toString() {
 		return this.builder.toString();
 	}

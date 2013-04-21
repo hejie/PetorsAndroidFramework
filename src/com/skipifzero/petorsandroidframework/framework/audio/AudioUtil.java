@@ -45,11 +45,11 @@ public class AudioUtil {
 	public SoundEffect getSoundEffect(String fileName) {
 		if(soundEffects.containsKey(fileName)) {
 			return soundEffects.get(fileName);
-		} else {
-			SoundEffect soundEffect = new SoundEffect(fileName, soundPool, assets);
-			soundEffects.put(fileName, soundEffect);
-			return soundEffect;
 		}
+		
+		SoundEffect soundEffect = new SoundEffect(fileName, soundPool, assets);
+		soundEffects.put(fileName, soundEffect);
+		return soundEffect;
 	}
 	
 	/**
@@ -60,11 +60,11 @@ public class AudioUtil {
 	public Music getMusic(String fileName) {
 		if(musics.containsKey(fileName)) {
 			return musics.get(fileName);
-		} else {
-			Music music = new Music(fileName, assets);
-			musics.put(fileName, music);
-			return music;
 		}
+		
+		Music music = new Music(fileName, assets);
+		musics.put(fileName, music);
+		return music;
 	}
 	
 	/*

@@ -7,8 +7,9 @@ import java.util.List;
  * A class used to pool objects. 
  * @param <T> the class to pool
  * 
- *  @author Peter Hillerström
- *  @version 1
+ * @author Peter Hillerström
+ * @since 2013-04-21
+ * @version 2
  */
 public class Pool<T> {
 
@@ -47,17 +48,15 @@ public class Pool<T> {
 			return factory.createObject();
 		}
 		//Return an old object to reuse.
-		else{
-			return freeObjects.remove(freeObjects.size() -1);
-		}
+		return freeObjects.remove(freeObjects.size() -1);
 	}
 
 	/**
 	 * Adds an object to recycle to this pool.
 	 * If the pool is full the object will be consumed by the Garbage Collector.
-	 * @param object
+	 * @param object the object to recycle
 	 */
-	public void freeObject(T object) {
+	public void recycleObject(T object) {
 		//Adds object to list of free objects. If the list is larger than the max size the object will be consumed by the Garbage Collector.
 		if (freeObjects.size() < maxSize){
 			freeObjects.add(object);

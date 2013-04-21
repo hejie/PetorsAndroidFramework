@@ -21,6 +21,7 @@ import com.skipifzero.petorsandroidframework.framework.math.Vector2;
  * Based on http://fractiousg.blogspot.se/2012/04/rendering-text-in-opengl-on-android.html.
  * 
  * @version 1
+ * @since 2013-04-21
  * @author Peter Hillerström
  */
 public class FontRenderer {
@@ -396,15 +397,15 @@ public class FontRenderer {
 		float pixelToInternal = (size / charRegionHeight); //charRegionHeight * pixelToInternal = size
 		
 		//Fixes alignment by calculating where to start rendering the string.
-		x += getHorizontalAdjustment(string, size, pixelToInternal);
-		y += getVerticalAdjustment(pixelToInternal);
+		float xItr = x + getHorizontalAdjustment(string, size, pixelToInternal);
+		float yItr = y + getVerticalAdjustment(pixelToInternal);
 		
 		//Render the string.
 		int arrayLocation = -1;
 		for(int i = 0; i < string.length(); i++) {
 			arrayLocation = getArrayLocation(string.charAt(i));
-			fontBatcher.draw(x, y, charRegionWidth*pixelToInternal, charRegionHeight*pixelToInternal, charRegions[arrayLocation]);
-			x += (charWidths[arrayLocation] + spacing)*pixelToInternal;
+			fontBatcher.draw(xItr, yItr, charRegionWidth*pixelToInternal, charRegionHeight*pixelToInternal, charRegions[arrayLocation]);
+			xItr += (charWidths[arrayLocation] + spacing)*pixelToInternal;
 		}
 	}
 	
@@ -429,17 +430,17 @@ public class FontRenderer {
 		//Fixes alignment
 		tempVector.set(getHorizontalAdjustment(string, size, pixelToInternal), getVerticalAdjustment(pixelToInternal));
 		tempVector.rotate(angle);
-		x += (float)tempVector.getX();
-		y += (float)tempVector.getY();
+		float xItr = x + (float)tempVector.getX();
+		float yItr = y + (float)tempVector.getY();
 		
 		//Render the string.
 		int arrayLocation = -1;
 		for(int i = 0; i < string.length(); i++) {
 			arrayLocation = getArrayLocation(string.charAt(i));
-			fontBatcher.draw(x, y, charRegionWidth*pixelToInternal, charRegionHeight*pixelToInternal, angle, charRegions[arrayLocation]);
+			fontBatcher.draw(xItr, yItr, charRegionWidth*pixelToInternal, charRegionHeight*pixelToInternal, angle, charRegions[arrayLocation]);
 			tempVector.makeUnit(angle).mult((charWidths[arrayLocation] + spacing)*pixelToInternal);
-			x += (float)tempVector.getX();
-			y += (float)tempVector.getY();
+			xItr += (float)tempVector.getX();
+			yItr += (float)tempVector.getY();
 		}
 	}
 	
@@ -563,12 +564,12 @@ public class FontRenderer {
 		}
 	}
 	
-	private int getArrayLocation(char c) {
+	private static int getArrayLocation(char c) {
 		if(c < FIRST_CHAR || c > LAST_CHAR) {
 			return UNKNOWN_CHAR_INDEX;
-		} else {
-			return ((int)c) - FIRST_CHAR;
 		}
+		
+		return c - FIRST_CHAR;
 	}
 	
 	/*

@@ -88,6 +88,7 @@ public abstract class GLActivity extends Activity implements Renderer {
 			try {
 				this.wait();
 			} catch(InterruptedException e) {
+				//Do nothing.
 			}
 		}
 		glSurfaceView.onPause();

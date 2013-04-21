@@ -274,13 +274,13 @@ public class PooledTouchInput implements TouchInput, OnTouchListener {
 			
 			//Frees filtered events from previous frame.
 			for(int i = 0; i < filteredEvents.size(); i++){		
-				touchEventPool.freeObject(filteredEvents.get(i));
+				touchEventPool.recycleObject(filteredEvents.get(i));
 			}
 			filteredEvents.clear();
 			
 			//Frees buffered events.
 			for(int i = 0; i < bufferedEvents.size(); i++){
-				touchEventPool.freeObject(bufferedEvents.get(i));
+				touchEventPool.recycleObject(bufferedEvents.get(i));
 			}
 			bufferedEvents.clear();
 						
@@ -315,12 +315,13 @@ public class PooledTouchInput implements TouchInput, OnTouchListener {
 	 * If the location is outside it changes it to the closest location inside the view.
 	 */
 	private double fixBoundsX(double x){
-		if(x < 0){
-			x = 0;
-		}else if(x > viewX * scaleFactor){
-			x = viewX * scaleFactor;
+		double xInner = x;
+		if(xInner < 0){
+			xInner = 0;
+		}else if(xInner > viewX * scaleFactor){
+			xInner = viewX * scaleFactor;
 		}
-		return x;
+		return xInner;
 	}
 	
 	/*
@@ -328,11 +329,12 @@ public class PooledTouchInput implements TouchInput, OnTouchListener {
 	 * If the location is outside it changes it to the closest location inside the view.
 	 */
 	private double fixBoundsY(double y){
-		if(y < 0){
-			y = 0;
-		}else if(y > viewY * scaleFactor){
-			y = viewY * scaleFactor;
+		double yInner = y;
+		if(yInner < 0){
+			yInner = 0;
+		}else if(yInner > viewY * scaleFactor){
+			yInner = viewY * scaleFactor;
 		}
-		return y;
+		return yInner;
 	}
 }

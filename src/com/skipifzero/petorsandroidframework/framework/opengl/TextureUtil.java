@@ -28,8 +28,8 @@ import com.skipifzero.petorsandroidframework.framework.FileIO;
  * all the textures in the specified folder should be of the same size and with a width/height equal to a power of two.
  * 
  * @author Peter Hillerström
- * @since 2013-04-12
- * @version 3
+ * @since 2013-04-21
+ * @version 4
  */
 public final class TextureUtil {
 	private static final int MAX_TEXTURE_SIZE = 8192;
@@ -162,21 +162,11 @@ public final class TextureUtil {
 	 * @return TextureRegion containing the specified texture
 	 */
 	public TextureRegion getTextureRegion(String textureFileName) {
-		if(!textureRegions.containsKey(textureFileName)) {
+		TextureRegion textureRegion = textureRegions.get(textureFileName);
+		if(textureRegion == null) {
 			throw new IllegalArgumentException(textureFileName + " doesn't exist in selected TextureUtil.");
 		}
-		return textureRegions.get(textureFileName);
-	}
-	
-	/**
-	 * Returns a TextureRegion containing the specified texture.
-	 * Same as "getTextureRegion()", but doesn't check if the specified texture exists and simply
-	 * returns null if it doesn't.
-	 * @param texturefileName the file name of the texture
-	 * @return TextureRegion containing the specified texture
-	 */
-	public TextureRegion getTextureRegionNoChecks(String texturefileName) {
-		return textureRegions.get(texturefileName);
+		return textureRegion;
 	}
 	
 	/**
@@ -192,7 +182,7 @@ public final class TextureUtil {
 	 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 	 */
 	
-	private int getTextureSize(int largestBitmapSize, int amountOfBitmaps) {
+	private static int getTextureSize(int largestBitmapSize, int amountOfBitmaps) {
 		int textureSize = 128;
 		while(true) {
 			int cellsPerRowOrCol = textureSize / largestBitmapSize;
@@ -209,7 +199,7 @@ public final class TextureUtil {
 		return textureSize;
 	}
 	
-	private int getLargestBitmapSize(List<Bitmap> bitmaps) {
+	private static int getLargestBitmapSize(List<Bitmap> bitmaps) {
 		int width = 0;
 		int height = 0;
 		for(Bitmap bitmap : bitmaps) {
@@ -223,7 +213,7 @@ public final class TextureUtil {
 		return width > height ? width : height;
 	}
 	
-	private List<Bitmap> loadBitmaps(AssetManager assets, String directory, Collection<String> fileNames, Bitmap.Config config) {
+	private static List<Bitmap> loadBitmaps(AssetManager assets, String directory, Collection<String> fileNames, Bitmap.Config config) {
 		FileIO file = new FileIO(assets);
 		List<Bitmap> bitmaps = new ArrayList<Bitmap>(fileNames.size());
 		for(String fileName : fileNames) {
