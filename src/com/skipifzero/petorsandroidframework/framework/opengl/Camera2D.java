@@ -3,6 +3,7 @@ package com.skipifzero.petorsandroidframework.framework.opengl;
 import android.opengl.GLES10;
 
 import com.skipifzero.petorsandroidframework.framework.math.BaseVector2;
+import com.skipifzero.petorsandroidframework.framework.math.BoundingRectangle;
 import com.skipifzero.petorsandroidframework.framework.math.Vector2;
 
 /**
@@ -10,11 +11,12 @@ import com.skipifzero.petorsandroidframework.framework.math.Vector2;
  * Basically the size and position of this camera is relative to an internal coordinate system.
  * 
  * @author Peter Hillerström
- * @version 1
+ * @since 2013-04-28
+ * @version 2
  */
 public class Camera2D {
-	private final Vector2 position = new Vector2(0,0);
-	private double frustrumX, frustrumY;
+	
+	private final BoundingRectangle bounds;
 	
 	/**
 	 * Creates a Camera with the specified size and position.
@@ -24,9 +26,7 @@ public class Camera2D {
 	 * @param frustrumY the height of the camera
 	 */
 	public Camera2D(double centerX, double centerY, double frustrumX, double frustrumY) {
-		this.position.set(centerX, centerY);
-		this.frustrumX = frustrumX;
-		this.frustrumY = frustrumY;
+		this.bounds = new BoundingRectangle(centerX, centerY, frustrumX, frustrumY);
 	}
 	
 	/**
@@ -40,10 +40,10 @@ public class Camera2D {
 		GLES10.glMatrixMode(GLES10.GL_PROJECTION);
 		GLES10.glLoadIdentity();
 		
-		float halfFrustrumX = (float)frustrumX/2;
-		float halfFrustrumY = (float)frustrumY/2;
-		float xPos = (float)position.getX();
-		float yPos = (float)position.getY();
+		float halfFrustrumX = (float)bounds.getWidth()/2;
+		float halfFrustrumY = (float)bounds.getHeight()/2;
+		float xPos = (float)bounds.getPosition().getX();
+		float yPos = (float)bounds.getPosition().getY();
 		GLES10.glOrthof(xPos - halfFrustrumX, xPos + halfFrustrumX, yPos - halfFrustrumY, yPos + halfFrustrumY, 1, -1);
 		
 		GLES10.glMatrixMode(GLES10.GL_MODELVIEW);
@@ -56,8 +56,8 @@ public class Camera2D {
 	 * @param frustrumY
 	 */
 	public void changeSize(double frustrumX, double frustrumY) {
-		this.frustrumX = frustrumX;
-		this.frustrumY = frustrumY;
+		bounds.setWidth(frustrumX);
+		bounds.setHeight(frustrumY);
 	}
 	
 	/**
@@ -65,7 +65,7 @@ public class Camera2D {
 	 * @param position the position
 	 */
 	public void setPosition(BaseVector2 position) {
-		this.position.set(position);
+		bounds.setPosition(position);
 	}
 	
 	/**
@@ -74,7 +74,7 @@ public class Camera2D {
 	 * @return position of this camera
 	 */
 	public Vector2 getPosition() {
-		return position;
+		return bounds.getPosition();
 	}
 	
 	/**
@@ -83,6 +83,15 @@ public class Camera2D {
 	 * @return position of this cammera
 	 */
 	public Vector2 getPositionCopy() {
-		return position.clone();
+		return bounds.getPosition().clone();
+	}
+	
+	/**
+	 * Returns a direct reference to this Camera2D's internal BoundingRectangle. Can be used to
+	 * change the cameras position and size or to check if this camera overlaps with stuff.
+	 * @return reference to this Camera2D's internal BoundingRectangle
+	 */
+	public BoundingRectangle getBounds() {
+		return bounds;
 	}
 }

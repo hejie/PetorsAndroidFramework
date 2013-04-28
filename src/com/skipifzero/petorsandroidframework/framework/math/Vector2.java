@@ -3,7 +3,8 @@ package com.skipifzero.petorsandroidframework.framework.math;
 /**
  * A mutable Vector2 implementation.
  * @author Peter Hillerström
- * @version 1
+ * @since 2013-04-28
+ * @version 2
  */
 public final class Vector2 extends BaseVector2{
 
@@ -143,16 +144,30 @@ public final class Vector2 extends BaseVector2{
 	/**
 	 * Multiplies this vector with the input factor.
 	 * Mutates this vector.
-	 * @param t the multiplication factor
+	 * @param m the multiplication factor
 	 * @return this vector
 	 */
 	@Override
-	public Vector2 mult(double t) {
-		this.x *= t;
-		this.y *= t;
+	public Vector2 mult(double m) {
+		this.x *= m;
+		this.y *= m;
 		return this;
 	}
 
+	/**
+	 * Divides this vector with the input divisor.
+	 * Will likely fail if d is equal to zero, use mult() to divide instead if you want to be safer.
+	 * Mutates this vector.
+	 * @param d the divisor
+	 * @return this vector
+	 */
+	@Override
+	public BaseVector2 div(double d) {
+		this.x /= d;
+		this.y /= d;
+		return this;
+	}
+	
 	/**
 	 * Returns a unit vector based on this vector.
 	 * Mutates this vector.

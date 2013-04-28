@@ -21,6 +21,8 @@ import com.skipifzero.petorsandroidframework.framework.input.BackKeyInput;
  * Extend this class, implement the needed methods, supply a GLController to start with and
  * start this Activity.
  * 
+ * Inspired by similar class found in Beginning Android Games by Mario Zechner.
+ * 
  * @author Peter Hillerström
  * @since 2013-04-03
  * @version 3

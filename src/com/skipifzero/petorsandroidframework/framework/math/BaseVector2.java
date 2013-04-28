@@ -2,10 +2,15 @@ package com.skipifzero.petorsandroidframework.framework.math;
 
 /**
  * An abstract class used for 2 dimensional vector implementations (Vector2 and its immutable counterpart FinalVector2).
+ * 
  * This class's internal variables are protected, so it's important this class and its implementations are placed alone 
  * in its own package. Otherwise there is a risk someone directly accesses the instance variables in FinalVector2.
+ * 
+ * Inspired by similar class found in Beginning Android Games by Mario Zechner.
+ * 
  * @author Peter Hillerström
- * @version 1
+ * @since 2013-04-28
+ * @version 2
  */
 public abstract class BaseVector2 implements Cloneable, Comparable<BaseVector2> {
 	public static final double DEG_TO_RAD = Math.PI / 180;
@@ -107,10 +112,19 @@ public abstract class BaseVector2 implements Cloneable, Comparable<BaseVector2> 
 	/**
 	 * Multiplies this vector with the input factor.
 	 * Either mutates this vector or creates a new one depending on implementation.
-	 * @param t the multiplication factor
+	 * @param m the multiplication factor
 	 * @return the resulting vector
 	 */
-	public abstract BaseVector2 mult(double t);
+	public abstract BaseVector2 mult(double m);
+	
+	/**
+	 * Divides this vector with the input divisor.
+	 * Will likely fail if d is equal to zero, use mult() to divide instead if you want to be safer.
+	 * Either mutates this vector or creates a new one depending on implementation.
+	 * @param d the divisor
+	 * @return the resulting vector
+	 */
+	public abstract BaseVector2 div(double d);
 	
 	/**
 	 * Returns a unit vector based on this vector.
@@ -136,7 +150,6 @@ public abstract class BaseVector2 implements Cloneable, Comparable<BaseVector2> 
 	 * @return the resulting vector
 	 */
 	public abstract BaseVector2 rotate(double degAngle);
-	
 	
 	/*
 	 * Non-mutating methods.
@@ -212,6 +225,14 @@ public abstract class BaseVector2 implements Cloneable, Comparable<BaseVector2> 
 		return distanceX * distanceX + distanceY * distanceY;
 	}
 	
+	/**
+	 * Returns the scalar product of this vector and the input vector.
+	 * @param vector the input vector
+	 * @return scalar product
+	 */
+	public double scalar(BaseVector2 vector) {
+		return this.x*vector.x + this.y*vector.y;
+	}
 	
 	/*
 	 * Others

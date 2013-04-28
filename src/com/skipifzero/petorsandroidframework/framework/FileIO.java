@@ -39,25 +39,24 @@ public class FileIO {
 		InputStream in = null;
 		
 		//Load bitmap.
-		try{
+		try {
 			in = assets.open(fileName);
 			bitmap = BitmapFactory.decodeStream(in);
-		}catch(IOException e){
+		} catch(IOException e) {
 			throw new RuntimeException("Couldn't load bitmap from asset file: \"" + fileName + "\"");
-		}
-		
-		//Throws an RuntimeException if it all somehow failed.
-		if(bitmap == null){
-			throw new RuntimeException("Couldn't load bitmap from asset file: \"" + fileName + "\"");
-		}
-		
-		//Try to close the input stream.
-		if(in != null){
-			try{
-				in.close();
-			}catch(IOException e){
-				//Do nothing.
+		} finally {
+			//Try to close the input stream.
+			if(in != null){
+				try{
+					in.close();
+				}catch(IOException e){
+					//Do nothing.
+				}
 			}
+		}
+		
+		if(bitmap == null) { //Throws a RuntimeException if it all somehow failed.
+			throw new RuntimeException("Couldn't load bitmap from asset file: \"" + fileName + "\"");
 		}
 		
 		return bitmap;

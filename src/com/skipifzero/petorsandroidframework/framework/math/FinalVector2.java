@@ -6,7 +6,8 @@ package com.skipifzero.petorsandroidframework.framework.math;
  * package together with the other vectors classes. Otherwise someone might be able to mutate objects of
  * this class.
  * @author Peter Hillerström
- * @version 1
+ * @since 2013-04-28
+ * @version 2
  */
 public final class FinalVector2 extends BaseVector2 {
 
@@ -59,8 +60,13 @@ public final class FinalVector2 extends BaseVector2 {
 	}
 
 	@Override
-	public FinalVector2 mult(double t) {
-		return new FinalVector2(this.x * t, this.y * t);
+	public FinalVector2 mult(double m) {
+		return new FinalVector2(this.x * m, this.y * m);
+	}
+	
+	@Override
+	public BaseVector2 div(double d) {
+		return new FinalVector2(this.x / d, this.y / d);
 	}
 
 	@Override

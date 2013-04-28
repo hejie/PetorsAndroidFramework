@@ -154,6 +154,10 @@ public class PooledTouchInput implements TouchInput, OnTouchListener {
 						}
 					}
 					break;
+					
+				default:
+					throw new AssertionError(); //I don't think this can happen. I hope.
+					
 			}
 			return true;	
 		}

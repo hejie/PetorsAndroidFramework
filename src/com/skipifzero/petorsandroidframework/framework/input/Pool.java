@@ -4,7 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * A class used to pool objects. 
+ * A class used to pool objects.
+ * 
+ * Heavily inspired by similar class found in Beginning Android Games by Mario Zechner.
+ *  
  * @param <T> the class to pool
  * 
  * @author Peter Hillerström

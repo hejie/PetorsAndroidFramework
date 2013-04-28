@@ -128,6 +128,9 @@ public final class TouchEvent implements Cloneable {
 				break;
 			case TOUCH_DRAGGED:
 				builder.append("TOUCH_DRAGGED");
+				break;
+			default:
+				throw new AssertionError(); //This should never happen.
 		}
 		return builder.toString();
 	}
