@@ -65,7 +65,7 @@ public final class FinalVector2 extends BaseVector2 {
 	}
 	
 	@Override
-	public BaseVector2 div(double d) {
+	public FinalVector2 div(double d) {
 		return new FinalVector2(this.x / d, this.y / d);
 	}
 

@@ -1,11 +1,16 @@
 package com.skipifzero.petorsandroidframework.framework.opengl;
 
+
+import java.util.ArrayList;
+import java.util.List;
+
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.opengl.GLES10;
+import android.util.Log;
 
 import com.skipifzero.petorsandroidframework.framework.math.BaseVector2;
 import com.skipifzero.petorsandroidframework.framework.math.Vector2;
@@ -20,8 +25,8 @@ import com.skipifzero.petorsandroidframework.framework.math.Vector2;
  * 
  * Based on http://fractiousg.blogspot.se/2012/04/rendering-text-in-opengl-on-android.html.
  * 
- * @version 1
- * @since 2013-04-21
+ * @version 2
+ * @since 2013-05-08
  * @author Peter Hillerström
  */
 public class FontRenderer {
@@ -34,7 +39,7 @@ public class FontRenderer {
 		public static final Typeface DEFAULT_FONT = Typeface.DEFAULT;
 		public static final int DEFAULT_SIZE = 32;
 		public static final int DEFAULT_SPACING = 1;
-		public static final int DEFAULT_MAX_CHAR_CAPACITY = 200;
+		public static final int DEFAULT_MAX_CHAR_CAPACITY = 250;
 		public static final int DEFAULT_X_PADDING = 1;
 		public static final int DEFAULT_Y_PADDING = 1;
 		public static final HorizontalAlignment DEFAULT_HORIZONTAL_ALIGNMENT = HorizontalAlignment.LEFT;
@@ -227,7 +232,8 @@ public class FontRenderer {
 	private VerticalAlignment verticalAlignment;
 	
 	//Temporary variables
-	private Vector2 tempVector = new Vector2(0,0);
+	private final Vector2 tempVector = new Vector2(0,0);
+	private final StringBuilder tempStrBuilder;
 	
 	private FontRenderer(Typeface font, int size, int spacing, int maxCharCapacity, int xPadding, int yPadding, HorizontalAlignment horizontalAlignment, VerticalAlignment verticalAlignment) {
 		this.font = font;
@@ -245,6 +251,9 @@ public class FontRenderer {
 		charRegions = new TextureRegion[CHARACTER_COUNT];
 		
 		load();
+		
+		//Temporary variables
+		this.tempStrBuilder = new StringBuilder(maxCharCapacity);
 	}
 	
 	/*
@@ -363,6 +372,39 @@ public class FontRenderer {
 		draw((float)x, (float)y, (float)size, (float)angle, string);
 	}
 	
+	/**
+	 * Draws the specified string at the specified coordinates with the specified size. The string
+	 * will be split up into substrings where each substring is a row and doesn't exceed the width
+	 * of the specified width. Strings will only be split at "empty space", so if you have a word
+	 * that is longer than the specified width the behavior of this method is undefined. 
+	 * HorizontalAlignment works as usual, but VerticalAlignment takes into account the height of
+	 * the whole "block".
+	 * @param position the position
+	 * @param size the size
+	 * @param width the maximum width of the string block
+	 * @param string the string to render
+	 */
+	public void drawRowBreaking(BaseVector2 position, double size, double width, String string) {
+		drawRowBreaking((float)position.getX(), (float)position.getY(), (float)size, (float)width, string);
+	}
+	
+	/**
+	 * Draws the specified string at the specified coordinates with the specified size. The string
+	 * will be split up into substrings where each substring is a row and doesn't exceed the width
+	 * of the specified width. Strings will only be split at "empty space", so if you have a word
+	 * that is longer than the specified width the behavior of this method is undefined. 
+	 * HorizontalAlignment works as usual, but VerticalAlignment takes into account the height of
+	 * the whole "block".
+	 * @param x the x-coordinate
+	 * @param y the y-coordinate
+	 * @param size the size
+	 * @param width the maximum width of the string block
+	 * @param string the string to render
+	 */
+	public void drawRowBreaking(double x, double y, double size, double width, String string) {
+		drawRowBreaking((float)x, (float)y, (float)size, (float)width, string);
+	}
+	
 	/*
 	 * Public methods - Rendering methods
 	 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
@@ -441,6 +483,76 @@ public class FontRenderer {
 			tempVector.makeUnit(angle).mult((charWidths[arrayLocation] + spacing)*pixelToInternal);
 			xItr += (float)tempVector.getX();
 			yItr += (float)tempVector.getY();
+		}
+	}
+	
+	/**
+	 * Draws the specified string at the specified coordinates with the specified size. The string
+	 * will be split up into substrings where each substring is a row and doesn't exceed the width
+	 * of the specified width. Strings will only be split at "empty space", so if you have a word
+	 * that is longer than the specified width the behavior of this method is undefined. 
+	 * HorizontalAlignment works as usual, but VerticalAlignment takes into account the height of
+	 * the whole "block".
+	 * @param x the x-coordinate
+	 * @param y the y-coordinate
+	 * @param size the size
+	 * @param width the maximum width of the string block
+	 * @param string the string to render
+	 */
+	@SuppressWarnings("boxing") //TODO: Petor am cry.
+	public void drawRowBreaking(float x, float y, float size, float width, String string) {
+		//Checks if there is anything to render.
+		if(size <= 0 || string.length() < 1) {
+			return;
+		}
+		
+		//Checks if width is valid
+		if(width < 0) {
+			return;
+		}
+		
+		//Deletes and appends string to temporary StringBuilder.
+		tempStrBuilder.delete(0, tempStrBuilder.length());
+		tempStrBuilder.append(string);
+		
+		//Creates substrings for each row
+		List<Integer> spaceIndices = getSpaceIndicies(string); //Gets index for each space in string
+		List<String> subStrings = new ArrayList<String>();
+		int startIndex = 0;
+		int lastLastIndex = 0;
+		String str = null;
+		String lastStr = null;
+		for(Integer lastIndex : spaceIndices) {
+			str = tempStrBuilder.substring(startIndex, lastIndex);
+			if(renderedStringWidth(str, size) >= width) {
+				subStrings.add(lastStr);
+				startIndex = lastLastIndex + 1; //+1 so it doesn't include "space" first on next line.
+			}
+			lastLastIndex = lastIndex;
+			lastStr = str;
+		}
+		subStrings.add(tempStrBuilder.substring(startIndex));
+		
+		//Calculates yPos for vertical alignment.
+		float yPos;
+		switch(verticalAlignment) {
+			case TOP:
+				yPos = y;
+				break;	
+			case CENTER:
+				yPos = y + (subStrings.size()*size)/2;
+				break;
+			case BOTTOM:
+				yPos = y + (subStrings.size()*size);
+				break;
+			default:
+				throw new AssertionError(); //Should never happen.
+		}
+		
+		//Draws each substring on the correct yPos.
+		for(String subStr : subStrings) {
+			draw(x, yPos, size, subStr);
+			yPos -= size;
 		}
 	}
 	
@@ -602,6 +714,7 @@ public class FontRenderer {
 	
 	private void generateTexture(Paint paint) {
 		Bitmap bitmap = Bitmap.createBitmap(textureSize, textureSize, Bitmap.Config.ALPHA_8);
+		Log.d("FontRenderer", "Created new Bitmap with size: " + textureSize + "x" + textureSize);
 		Canvas canvas = new Canvas(bitmap);
 		bitmap.eraseColor(0x00000000); //Transparent Background
 		
@@ -697,5 +810,16 @@ public class FontRenderer {
 		paint.setColor(0xffffffff); //Set ARGB (White, Opaque).
 		paint.setTypeface(font);
 		return paint;
+	}
+	
+	@SuppressWarnings("boxing") //TODO: Petor am cry.
+	private static List<Integer> getSpaceIndicies(String string) {
+		List<Integer> indices = new ArrayList<Integer>();
+		for(int i = 0; i < string.length(); i++) {
+			if(string.charAt(i) == ' ') {
+				indices.add(i);
+			}
+		}
+		return indices;
 	}
 }

@@ -1,5 +1,6 @@
 package com.skipifzero.petorsandroidframework.framework.opengl;
 
+
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -14,6 +15,7 @@ import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.util.Log;
 
 import com.skipifzero.petorsandroidframework.framework.FileIO;
 
@@ -68,6 +70,7 @@ public final class TextureUtil {
 				
 		//Create bitmap atlas and drawing tools.
 		Bitmap bitmapAtlas = Bitmap.createBitmap(textureSize, textureSize, quality);
+		Log.d("TextureUtil", "Created new Bitmap with size: " + textureSize + "x" + textureSize);
 		Canvas canvas = new Canvas(bitmapAtlas);
 		Paint paint = new Paint();
 		

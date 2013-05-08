@@ -162,7 +162,7 @@ public final class Vector2 extends BaseVector2{
 	 * @return this vector
 	 */
 	@Override
-	public BaseVector2 div(double d) {
+	public Vector2 div(double d) {
 		this.x /= d;
 		this.y /= d;
 		return this;
