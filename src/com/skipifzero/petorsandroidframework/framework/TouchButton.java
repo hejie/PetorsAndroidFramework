@@ -16,6 +16,10 @@ import com.skipifzero.petorsandroidframework.framework.math.Vector2;
  * state is only meant to be used when drawing the button, while the activated state should be used
  * when you want the button to do something.
  * 
+ * There is also a third state, the enabled state. When a TouchButton is enabled it can be used as
+ * usual, but when it's disabled the touched and activated states are always false. A TouchButton
+ * is always enabled by default.
+ * 
  * There are three types of activation types:
  * 
  * ACTIVATE_ON_TOUCH: Button will activate if a TOUCH_DOWN event that overlaps with this TouchButton
@@ -27,8 +31,8 @@ import com.skipifzero.petorsandroidframework.framework.math.Vector2;
  * exists.
  * 
  * @author Peter Hillerström
- * @since 2013-04-01
- * @version 1
+ * @since 2013-05-09
+ * @version 2
  */
 public class TouchButton {
 	
@@ -57,7 +61,7 @@ public class TouchButton {
 	
 	private final TouchButtonType type;
 	private final BoundingRectangle bounds;
-	private boolean touched, activated;
+	private boolean enabled, touched, activated;
 	
 	//Temp variables
 	private final Vector2 tempVector = new Vector2(-1,-1);
@@ -74,6 +78,7 @@ public class TouchButton {
 		this.listeners = new ArrayList<TouchButtonListener>();
 		this.bounds = new BoundingRectangle(position, width, height);
 		this.type = type;
+		this.enabled = true;
 		this.touched = false;
 		this.activated = false;
 	}
@@ -90,6 +95,7 @@ public class TouchButton {
 		this.listeners = new ArrayList<TouchButtonListener>();
 		this.bounds = new BoundingRectangle(x, y, width, height);
 		this.type = type;
+		this.enabled = true;
 		this.touched = false;
 		this.activated = false;
 	}
@@ -101,6 +107,19 @@ public class TouchButton {
 	 * @return whether this button is currently activated or not
 	 */
 	public boolean update(List<TouchEvent> touchEvents) {
+		//If button is disabled it's neither touched or activated.
+		if(!enabled) {
+			touched = false;
+			activated = false;
+			return false;
+		}
+		
+		//Null checks.
+		if(touchEvents == null) {
+			touched = false;
+			activated = false;
+			return false;
+		}
 		
 		//Checks if button is touched
 		touched = false;
@@ -159,6 +178,14 @@ public class TouchButton {
 	 * Public methods
 	 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 	 */
+	
+	/**
+	 * Returns whether this TouchButton is enabled or not.
+	 * @return whether this TouchButton is enabled or not
+	 */
+	public boolean isEnabled() {
+		return enabled;
+	}
 	
 	/**
 	 * Returns whether this TouchButton is touched or not.
@@ -230,7 +257,16 @@ public class TouchButton {
 	public double getHeight() {
 		return bounds.getHeight();
 	}
-	
+
+	/**
+	 * Returns this TouchButton's dimensions.
+	 * @return this TouchButton's dimensions.
+	 * @see BoundingRectangle#getDimension()
+	 */
+	public BaseVector2 getDimension() {
+		return bounds.getDimension();
+	}
+
 	/**
 	 * Returns this TouchButton's BoundingRectangle.
 	 * @return this TouchButton's BoundingRectangle
@@ -243,6 +279,22 @@ public class TouchButton {
 	 * Setters
 	 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 	 */
+	
+	/**
+	 * Enables this TouchButton.
+	 */
+	public void enable() {
+		enabled = true;
+	}
+	
+	/**
+	 * Disables this TouchButton. Until it has been enabled again it can't be touched or activated.
+	 */
+	public void disable() {
+		enabled = false;
+		touched = false;
+		activated = false;
+	}
 	
 	/**
 	 * Sets this TouchButton's position to the specified position.
@@ -266,5 +318,14 @@ public class TouchButton {
 	 */
 	public void setHeight(double height) {
 		bounds.setHeight(height);
+	}
+
+	/**
+	 * Sets this TouchButton's dimensions to the specified dimensions.
+	 * @param dimension the specified dimension
+	 * @see BoundingRectangle#setDimension(BaseVector2)
+	 */
+	public void setDimension(BaseVector2 dimension) {
+		bounds.setDimension(dimension);
 	}
 }

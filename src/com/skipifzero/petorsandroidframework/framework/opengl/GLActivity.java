@@ -145,7 +145,9 @@ public abstract class GLActivity extends Activity implements Renderer {
 					fps = frameCount;
 					fpsBuilder.delete(5, fpsBuilder.length());
 					fpsBuilder.append(fps);
-					Log.d("FPS", fpsBuilder.toString());
+					if(fps < 30) { //TODO: To be removed. Only log fps if it falls below 30.
+						Log.d("FPS", fpsBuilder.toString());
+					}
 					frameCount = 0;
 					lastFPSCount = System.nanoTime();
 				}
@@ -209,7 +211,8 @@ public abstract class GLActivity extends Activity implements Renderer {
 	 * @throws IllegalArgumentException if new GLController is null
 	 * @param glController the new GLController
 	 */
-	public void changeGLController(GLController glController, boolean catchBackKey) {
+	@Deprecated //TODO: Not really deprecated, but is needed to make sure people don't use wrong method in project.
+	public void changeGLController(GLController glController) {
 		if(glController == null) {
 			throw new IllegalArgumentException("New GLController is null, not allowed.");
 		}
@@ -220,30 +223,36 @@ public abstract class GLActivity extends Activity implements Renderer {
 		
 		//Resumes new GLController
 		glController.onResume();
-		glController.update(0.0, 0); //TODO: Not sure if necessary or good idea.
 		this.glController = glController;
 		
-		catchBackKey(catchBackKey);
+		catchBackKey(glController.catchBackKey());
 	}
 	
 	/**
 	 * Special version of changeGLController(), won't call pause() or dispose() in old GLController. 
 	 * Can for example be used if assets are transferred between GLController's.
-	 * Can be called from anywhere within a GLController. Will pause and dipose of old GLController.
+	 * Can be called from anywhere within a GLController. Will pause and dispose of old GLController.
 	 * @throws IllegalArgumentException if new GLController is null
 	 * @param glController the new GLController
 	 */
-	public void changeGLControllerDontDispose(GLController glController, boolean catchBackKey) {
+	public void changeGLControllerDontDispose(GLController glController) {
 		if(glController == null) {
 			throw new IllegalArgumentException("New GLController is null, not allowed.");
 		}
 		
 		//Resumes new GLController
 		glController.onResume();
-		glController.update(0.0, 0); //TODO: Not sure if necessary or good idea.
 		this.glController = glController;
 		
-		catchBackKey(catchBackKey);
+		catchBackKey(glController.catchBackKey());
+	}
+	
+	/**
+	 * Returns the current active GLController.
+	 * @return current active GLController
+	 */
+	public GLController getCurrentGLController() {
+		return glController;
 	}
 	
 	/**

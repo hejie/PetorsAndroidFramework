@@ -3,6 +3,7 @@ package com.skipifzero.petorsandroidframework.framework.opengl;
 import android.opengl.GLES10;
 
 import com.skipifzero.petorsandroidframework.framework.math.BaseVector2;
+import com.skipifzero.petorsandroidframework.framework.math.BoundingRectangle;
 
 /**
  * Class used for rendering sprites quickly with OpenGL.
@@ -16,6 +17,7 @@ import com.skipifzero.petorsandroidframework.framework.math.BaseVector2;
  * do more draws per batch than your specified capacity.
  * 
  * @author Peter Hillerström
+ * @since 2013-05-14
  * @version 1
  */
 
@@ -64,6 +66,9 @@ public class SpriteBatcher {
 	 * Renders the batched draws.
 	 */
 	public void renderBatch() {
+		if(spriteAmount == 0) {
+			return;
+		}
 		vertices.setVertices(verticesBuffer, 0, bufferIndex);
 		vertices.bind();
 		vertices.draw(GLES10.GL_TRIANGLES, 0, spriteAmount * 6);
@@ -93,6 +98,25 @@ public class SpriteBatcher {
 	}
 	
 	/**
+	 * Draws the specified TextureRegion with the specified size to the specified position.
+	 * @param centerPosition the position
+	 * @param dimension the dimension vector
+	 * @param texRegion the TextureRegion
+	 */
+	public void draw(BaseVector2 centerPosition, BaseVector2 dimension, TextureRegion texRegion) {
+		draw((float)centerPosition.getX(), (float)centerPosition.getY(), (float)dimension.getX(), (float)dimension.getY(), texRegion);
+	}
+	
+	/**
+	 * Draws the specified TextureRegion with the specified size to the specified position.
+	 * @param shape the BoundingRectangle with the size and position
+	 * @param texRegion the TextureRegion
+	 */
+	public void draw(BoundingRectangle shape, TextureRegion texRegion) {
+		draw((float)shape.getPosition().getX(), (float)shape.getPosition().getY(), (float)shape.getWidth(), (float)shape.getHeight(), texRegion);
+	}
+	
+	/**
 	 * Draws the specified TextureRegion with the specified size to the specified coordinates rotated to the specified angle.
 	 * @param x the center x coordinate
 	 * @param y the center y coordinate
@@ -115,6 +139,27 @@ public class SpriteBatcher {
 	 */
 	public void draw(BaseVector2 centerPosition, double width, double height, double angle, TextureRegion texRegion) {
 		draw((float)centerPosition.getX(), (float)centerPosition.getY(), (float)width, (float)height, (float)angle, texRegion);
+	}
+	
+	/**
+	 * Draws the specified TextureRegion with the specified size to the specified position rotated to the specified angle.
+	 * @param centerPosition the position
+	 * @param dimension the dimension vector
+	 * @param angle the angle
+	 * @param texRegion the TextureRegion
+	 */
+	public void draw(BaseVector2 centerPosition, BaseVector2 dimension, double angle, TextureRegion texRegion) {
+		draw((float)centerPosition.getX(), (float)centerPosition.getY(), (float)dimension.getX(), (float)dimension.getY(), (float)angle, texRegion);
+	}
+	
+	/**
+	 * Draws the specified TextureRegion with the specified size to the specified position rotated to the specified angle.
+	 * @param shape the BoundingRectangle with the size and position
+	 * @param angle the angle
+	 * @param texRegion the TextureRegion
+	 */
+	public void draw(BoundingRectangle shape, double angle, TextureRegion texRegion) {
+		draw((float)shape.getPosition().getX(), (float)shape.getPosition().getY(), (float)shape.getWidth(), (float)shape.getHeight(), angle, texRegion);
 	}
 	
 	/**

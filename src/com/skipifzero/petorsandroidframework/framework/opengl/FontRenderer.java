@@ -1,6 +1,5 @@
 package com.skipifzero.petorsandroidframework.framework.opengl;
 
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -513,22 +512,22 @@ public class FontRenderer {
 		
 		//Deletes and appends string to temporary StringBuilder.
 		tempStrBuilder.delete(0, tempStrBuilder.length());
-		tempStrBuilder.append(string);
+		tempStrBuilder.append(string).append(" "); //Hack to make sure there is an index at the end of the string.
 		
 		//Creates substrings for each row
-		List<Integer> spaceIndices = getSpaceIndicies(string); //Gets index for each space in string
+		List<Integer> spaceIndices = getSpaceIndicies(tempStrBuilder.toString()); //Gets index for each space in string
 		List<String> subStrings = new ArrayList<String>();
 		int startIndex = 0;
-		int lastLastIndex = 0;
+		int lastIndex = 0;
 		String str = null;
 		String lastStr = null;
-		for(Integer lastIndex : spaceIndices) {
-			str = tempStrBuilder.substring(startIndex, lastIndex);
+		for(Integer currentIndex : spaceIndices) {
+			str = tempStrBuilder.substring(startIndex, currentIndex);
 			if(renderedStringWidth(str, size) >= width) {
 				subStrings.add(lastStr);
-				startIndex = lastLastIndex + 1; //+1 so it doesn't include "space" first on next line.
+				startIndex = lastIndex + 1; //+1 so it doesn't include "space" first on next line.
 			}
-			lastLastIndex = lastIndex;
+			lastIndex = currentIndex;
 			lastStr = str;
 		}
 		subStrings.add(tempStrBuilder.substring(startIndex));

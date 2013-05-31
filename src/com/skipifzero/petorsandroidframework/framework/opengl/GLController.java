@@ -34,4 +34,10 @@ public interface GLController {
 	 * Called when Activity is destroyed and when this GLController is destroyed.
 	 */
 	public void dispose();
+	
+	/**
+	 * Whether this GLController should catch the back key or not.
+	 * @return whether this GLController should catch the back key or not
+	 */
+	public boolean catchBackKey();
 }

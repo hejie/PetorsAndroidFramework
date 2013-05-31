@@ -113,4 +113,9 @@ public class MainScreen extends GLScreen {
 		texUtil.dispose();
 		font.dispose();
 	}
+
+	@Override
+	public boolean catchBackKey() {
+		return false;
+	}
 }

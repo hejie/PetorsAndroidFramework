@@ -22,7 +22,7 @@ import com.skipifzero.petorsandroidframework.framework.input.TouchEvent.TouchTyp
 
 public class PooledTouchInput implements TouchInput, OnTouchListener {
 	
-	private View view;
+	private final View view;
 	private final double scaleFactor;
 	private final int maxTouchPositions;
 	
@@ -80,8 +80,6 @@ public class PooledTouchInput implements TouchInput, OnTouchListener {
 		touchDragged = new boolean[maxTouchPositions];
 		Arrays.fill(touchDragged, false);
 	}
-	
-	
 		
 	@Override
 	public boolean onTouch(View view, MotionEvent motionEvent) {
@@ -170,6 +168,8 @@ public class PooledTouchInput implements TouchInput, OnTouchListener {
 	 */
 	@Override
 	public void update() {
+		view.setOnTouchListener(this); //TODO: Yeah... This is a hack. Hope it's not expensive.
+		
 		synchronized(this){	
 			
 			//Sets viewX and viewY.

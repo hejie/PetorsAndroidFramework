@@ -55,8 +55,9 @@ public class TransformingTextEntity implements TextEntity {
 	 * @param color the color of the text
 	 * @param timeBeforeTransform the time before transformation starts
 	 * @param transformTime the time it takes the transformation to complete
+	 * @return this
 	 */
-	public void set(String text, TextEntity origin, TextEntity destination, int color, double timeBeforeTransform, double transformTime) {
+	public TransformingTextEntity set(String text, TextEntity origin, TextEntity destination, int color, double timeBeforeTransform, double transformTime) {
 		originText.set(origin);
 		destinationText.set(destination);
 		currentText.set(origin);
@@ -85,6 +86,8 @@ public class TransformingTextEntity implements TextEntity {
 		} else {
 			this.angleDiff = angleDiff2/transformTime;
 		}
+		
+		return this;
 	}
 	
 	/*
